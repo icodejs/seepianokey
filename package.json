@@ -9,6 +9,7 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "2.1.8",
+    "tonal": "^2.2.1",
     "webmidi": "^2.3.2"
   },
   "scripts": {
