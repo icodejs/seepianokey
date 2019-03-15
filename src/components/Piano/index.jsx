@@ -1,7 +1,10 @@
+// https://www.scales-chords.com/chord/piano/Bdim
+
 import React, { Component, Fragment } from 'react';
 import * as R from 'ramda';
 import webmidi from 'webmidi';
 import config from '../../config';
+import './Piano.scss';
 
 const createNoteId = event => event.note.name + event.note.octave;
 
@@ -78,6 +81,36 @@ class Piano extends Component {
       <Fragment>
         {this.renderPossibleChords()}
         {this.renderNotes()}
+        <div className="piano">
+          <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+          <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+        </div>
       </Fragment>
     );
   }
