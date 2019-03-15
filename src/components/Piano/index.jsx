@@ -3,6 +3,7 @@
 import React, { Component, Fragment } from 'react';
 import * as R from 'ramda';
 import webmidi from 'webmidi';
+import classNames from 'classnames';
 import config from '../../config';
 import './Piano.scss';
 
@@ -54,9 +55,9 @@ class Piano extends Component {
     });
   }
 
-  renderNotes() {
+  renderNotesPressed() {
     return this.state.notes.map(({ name }, index) => (
-      <p key={index}>{name}</p>
+      <div className="notes-pressed" key={index}>{name}</div>
     ));
   }
 
@@ -73,43 +74,48 @@ class Piano extends Component {
       }
     );
 
-    return <div>{`Possible Chords: ${R.take(3)(chordFound)}`}</div>;
+    return (
+      <div className="possible-chords">
+        {`Possible Chords: ${R.take(3)(chordFound)}`}
+      </div>
+    );
+  }
+
+  renderPiano() {
+    const octaves = 2;
+    return [...Array(octaves)].map((o, index) => {
+      const pianoOctave = index + 3;
+
+      return (
+        <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
+          {[...Array(12)].map((k, index) => {
+            const note = config.notes[index];
+            const [sharp] = note.split('-');
+            const selected = this.state.notes.find(({ name, octave }) => {
+              return name === sharp && octave === pianoOctave;
+            })
+
+            return (
+              <li
+                key={`${note}_${pianoOctave}`}
+                className={classNames(`${note}_${pianoOctave}`, { selected })}
+              />
+            );
+          })}
+        </ul>
+      );
+    });
   }
 
   render() {
     return (
       <Fragment>
-        {this.renderPossibleChords()}
-        {this.renderNotes()}
+        <div className="info">
+          {this.renderPossibleChords()}
+          {this.renderNotesPressed()}
+        </div>
         <div className="piano">
-          <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-          <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
+          {this.renderPiano()}
         </div>
       </Fragment>
     );

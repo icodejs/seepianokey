@@ -3,12 +3,13 @@
   background-color: #282c34;
   font-size: calc(10px + 2vmin);
   color: white;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* min-height: 100vh; */
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.info {
+  height: 20vh;
 }
