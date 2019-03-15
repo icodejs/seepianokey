@@ -1,5 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import * as R from 'ramda';
 import webmidi from 'webmidi';
+import config from '../../config';
+
+const createNoteId = event => event.note.name + event.note.octave;
 
 class Piano extends Component {
   constructor(props) {
@@ -24,16 +28,23 @@ class Piano extends Component {
         const input = webmidi.getInputByName(name);
 
         input.addListener('noteon', 'all', (e) => {
-          const noteId = e.note.name + e.note.octave;
           this.setState({
-            notes: [...this.state.notes, { name: noteId }]
+            notes: [
+              ...this.state.notes,
+              {
+                id: createNoteId(e),
+                midiNote: e.note.number,
+                rawVelocity: e.rawVelocity,
+                ...e.note,
+              }
+            ].sort((a, b) => a.midiNote - b.midiNote)
           });
         });
 
         input.addListener('noteoff', 'all', (e) => {
-          const noteId = e.note.name + e.note.octave;
+          const noteId = createNoteId(e);
           this.setState({
-            notes: this.state.notes.filter(({ name }) => name !== noteId)
+            notes: this.state.notes.filter(({ id }) => id !== noteId)
           });
         });
       }
@@ -46,8 +57,29 @@ class Piano extends Component {
     ));
   }
 
+  renderPossibleChords() {
+    if (!this.state.notes.length) {
+      return;
+    }
+
+    const chordFound = Object
+      .keys(config.chords.majorChords)
+      .filter(key => {
+        const chord = config.chords.majorChords[key];
+        return this.state.notes.every(({ name }) => chord.includes(name));
+      }
+    );
+
+    return <div>{`Possible Chords: ${R.take(3)(chordFound)}`}</div>;
+  }
+
   render() {
-    return <Fragment>{this.renderNotes()}</Fragment>;
+    return (
+      <Fragment>
+        {this.renderPossibleChords()}
+        {this.renderNotes()}
+      </Fragment>
+    );
   }
 }
 
