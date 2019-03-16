@@ -1,5 +1,5 @@
 // https://www.scales-chords.com/chord/piano/Bdim
-
+import { chord } from "tonal-detect"
 import React, { Component, Fragment } from 'react';
 import * as R from 'ramda';
 import webmidi from 'webmidi';
@@ -62,21 +62,17 @@ class Piano extends Component {
   }
 
   renderPossibleChords() {
-    if (!this.state.notes.length) {
+    const { notes } = this.state;
+
+    if (!notes.length) {
       return;
     }
 
-    const chordFound = Object
-      .keys(config.chords.majorChords)
-      .filter(key => {
-        const chord = config.chords.majorChords[key];
-        return this.state.notes.every(({ name }) => chord.includes(name));
-      }
-    );
+    const noteNames = notes.map(({ name }) => name);
 
     return (
       <div className="possible-chords">
-        {`Possible Chords: ${R.take(3)(chordFound)}`}
+        {`Possible Chords: ${chord(noteNames).join(', ')}`}
       </div>
     );
   }

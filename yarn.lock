@@ -9545,6 +9545,16 @@ tonal-chord@^2.2.1:
     tonal-note "^2.2.1"
     tonal-pcset "^2.2.1"
 
+tonal-detect@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/tonal-detect/-/tonal-detect-2.2.1.tgz#845c60685ce926421fcd28463bf1bd060e805f35"
+  integrity sha512-MD5+ithCqCWqv/Fh2xAofbyt3pMxLe2q+JdAD94h+TINhgjPXpCyk0jmmLWkLOYKnzECQ+9IMnc22thi0VpAFg==
+  dependencies:
+    tonal-array "^2.2.1"
+    tonal-dictionary "^2.2.1"
+    tonal-note "^2.2.1"
+    tonal-pcset "^2.2.1"
+
 tonal-dictionary@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/tonal-dictionary/-/tonal-dictionary-2.2.1.tgz#cc0dbc6c1d942dd8d468d40451498eccfc68c78e"
