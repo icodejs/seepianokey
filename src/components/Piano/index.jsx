@@ -9,6 +9,10 @@ import './Piano.scss';
 
 const createNoteId = event => event.note.name + event.note.octave;
 
+const findControllerByName = (controllers, name) =>
+  [...controllers]
+    .find(controller => controller.name.toLowerCase().includes(name.toLowerCase()));
+
 class Piano extends Component {
   constructor(props) {
     super(props);
@@ -26,8 +30,7 @@ class Piano extends Component {
       if (err) {
         console.log('WebMidi could not be enabled.', err);
       } else {
-
-        const [device] = webmidi.inputs;
+        const device = findControllerByName(webmidi.inputs, 'APC');
         const { name } = device;
         const input = webmidi.getInputByName(name);
 
