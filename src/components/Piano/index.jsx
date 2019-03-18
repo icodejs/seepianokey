@@ -1,10 +1,10 @@
 // https://www.scales-chords.com/chord/piano/Bdim
 import { chord } from "tonal-detect"
 import React, { Component, Fragment } from 'react';
-import * as R from 'ramda';
+// import * as R from 'ramda';
 import webmidi from 'webmidi';
 import classNames from 'classnames';
-import config from '../../config';
+import config, { env } from '../../config';
 import './Piano.scss';
 
 const createNoteId = event => event.note.name + event.note.octave;
