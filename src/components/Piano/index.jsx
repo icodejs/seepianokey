@@ -4,7 +4,7 @@ import React, { Component, Fragment } from 'react';
 // import * as R from 'ramda';
 import webmidi from 'webmidi';
 import classNames from 'classnames';
-import config, { env } from '../../config';
+import { env, notes } from '../../config';
 import './Piano.scss';
 
 const createNoteId = event => event.note.name + event.note.octave;
@@ -93,10 +93,9 @@ class Piano extends Component {
       return (
         <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
           {[...Array(12)].map((k, index) => {
-            const note = config.notes[index];
-            const [sharp] = note.split('-');
+            const note = notes[index];
             const selected = this.state.notes.find(({ name, octave }) => {
-              return name === sharp && octave === pianoOctave;
+              return name === note && octave === pianoOctave;
             })
 
             return (
