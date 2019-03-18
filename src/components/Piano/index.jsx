@@ -30,7 +30,12 @@ class Piano extends Component {
       if (err) {
         console.log('WebMidi could not be enabled.', err);
       } else {
-        const device = findControllerByName(webmidi.inputs, 'APC');
+        const device = findControllerByName(webmidi.inputs, env.DEFAULT_CONTROLLER);
+
+        if (!device) {
+          return console.log('No MIDI device found.');
+        }
+
         const { name } = device;
         const input = webmidi.getInputByName(name);
 
