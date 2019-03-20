@@ -64,7 +64,7 @@ const modules = [
 ]; // e.g. Scale training || Chord training || Timing || Find Key || Chord progression training
 
 // console.log(Scale.names());
-console.log(modules);
+// console.log(modules);
 
 /*
   'C',

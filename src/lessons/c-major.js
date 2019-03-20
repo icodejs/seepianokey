@@ -1,7 +1,50 @@
-export default () => {
-  const scale = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+export const scaleLesson = () => {
+  const scaleBase = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+  const scaleForwards = [...scaleBase, scaleBase[0]];
+  const scaleBackwards = [...scaleForwards].reverse();
+  const scale = [...scaleForwards, ...scaleBackwards];
+  const progress = [];
 
+  return function fn(note) {
+    const index = progress.length;
+    const correct = scale[index] === note;
+
+    if (correct) {
+      progress.push(note);
+    }
+
+    const complete = scale.length === progress.length;
+
+    return {
+      scale,
+      correct,
+      progress,
+      complete
+    };
+  };
 };
+
+// const lesson = scaleLesson();
+
+// console.log(lesson('C'));
+// console.log(lesson('E')); // wrong note
+// console.log(lesson('D'));
+// console.log(lesson('E'));
+// console.log(lesson('F'));
+// console.log(lesson('G'));
+// console.log(lesson('A'));
+// console.log(lesson('B'));
+// console.log(lesson('C'));
+// console.log(lesson('C'));
+// console.log(lesson('B'));
+// console.log(lesson('A'));
+// console.log(lesson('G'));
+// console.log(lesson('F'));
+// console.log(lesson('E'));
+// console.log(lesson('D'));
+// console.log(lesson('D')); // wrong note
+// console.log(lesson('C'));
+
 
 /*
 function chordLesson() {
@@ -49,50 +92,4 @@ function chordLesson() {
 }
 */
 
-/* function scaleLesson() {
-  const scaleBase = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-  const scaleForwards = [...scaleBase, scaleBase[0]];
-  const scaleBackwards = [...scaleForwards].reverse();
-  const scale = [...scaleForwards, ...scaleBackwards];
-  const progress = [];
 
-  return function fn(note) {
-    const index = progress.length;
-    const correct = scale[index] === note;
-
-    if (correct) {
-      progress.push(note);
-    }
-
-    const complete = scale.length === progress.length;
-
-    return {
-      scale,
-      correct,
-      progress,
-      complete
-    };
-  };
-}
-
-const lesson = scaleLesson();
-
-console.log(lesson('C'));
-console.log(lesson('E')); // wrong note
-console.log(lesson('D'));
-console.log(lesson('E'));
-console.log(lesson('F'));
-console.log(lesson('G'));
-console.log(lesson('A'));
-console.log(lesson('B'));
-console.log(lesson('C'));
-console.log(lesson('C'));
-console.log(lesson('B'));
-console.log(lesson('A'));
-console.log(lesson('G'));
-console.log(lesson('F'));
-console.log(lesson('E'));
-console.log(lesson('D'));
-console.log(lesson('D')); // wrong note
-console.log(lesson('C'));
- */
