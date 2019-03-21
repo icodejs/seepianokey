@@ -1,115 +1,67 @@
 // https://www.scales-chords.com/chord/piano/Bdim
-import { chord } from "tonal-detect"
+// import { chord } from "tonal-detect"
 import React, { Component, Fragment } from 'react';
 // import * as R from 'ramda';
-import webmidi from 'webmidi';
+// import webmidi from 'webmidi';
 import classNames from 'classnames';
-import { scaleLesson } from '../../lessons/c-major';
-import { env, notes } from '../../config';
+// import { scaleLesson } from '../../lessons/c-major';
+import { notes } from '../../config';
 import './Piano.scss';
-
-const cScaleLesson = scaleLesson();
-const createNoteId = event => event.note.name + event.note.octave;
-
-const findControllerByName = (controllers, name) =>
-  [...controllers]
-    .find(controller => controller.name.toLowerCase().includes(name.toLowerCase()));
 
 class Piano extends Component {
   constructor(props) {
     super(props);
     this.state = {
       notes: [],
-      lesson: {}
+      deviceSet: false
     };
   }
 
-  componentDidMount() {
-    this.setupMidi();
+  parseNote(event) {
+    return {
+      id: event.note.name + event.note.octave,
+      midiNote: event.note.number,
+      rawVelocity: event.rawVelocity,
+      ...event.note
+    };
   }
 
   onNoteOn = e => {
-    const note = {
-      id: createNoteId(e),
-      midiNote: e.note.number,
-      rawVelocity: e.rawVelocity,
-      ...e.note
-    };
-
+    const note = this.parseNote(e);
+    this.props.onNoteOn(note);
     this.setState({
-      notes: [...this.state.notes, note].sort(
-        (a, b) => a.midiNote - b.midiNote
-      ),
-      lesson: cScaleLesson(note.name)
+      notes: [...this.state.notes, note].sort((a, b) => a.midiNote - b.midiNote)
     });
   };
 
   onNoteOff = e => {
-    const noteId = createNoteId(e);
+    const note = this.parseNote(e);
+    this.props.onNoteOff(note);
+
     this.setState({
-      notes: this.state.notes.filter(({ id }) => id !== noteId)
+      notes: this.state.notes.filter(({ id }) => id !== note.id)
     });
   };
 
-  setupKeyListeners(input) {
-    input.addListener('noteon', 'all', this.onNoteOn);
-    input.addListener('noteoff', 'all', this.onNoteOff);
-  }
+  componentDidUpdate() {
+    const { midiInputDevice } = this.props;
+    const { deviceSet } = this.state;
 
-  setupMidi() {
-    webmidi.enable(err => {
-      if (err) {
-        console.log('WebMidi could not be enabled.', err);
-      } else {
-        const device = findControllerByName(
-          webmidi.inputs,
-          env.DEFAULT_CONTROLLER
-        );
-
-        if (!device) {
-          return console.log('No MIDI device found.');
-        }
-
-        const { name } = device;
-        const input = webmidi.getInputByName(name);
-        this.setupKeyListeners(input);
-      }
-    });
-  }
-
-  renderLesson() {
-    const { correct, progress, complete } = this.state.lesson;
-    return (
-      <div>
-        <h3>C Scale Lesson</h3>
-        <div>{complete ? 'Scale completed' : progress}</div>
-        {/* !correct ? <div>Incorrect key</div> : null */}
-      </div>
-    );
-  }
-
-  renderNotesPressed() {
-    return this.state.notes.map(({ name }, index) => (
-      <div className="notes-pressed" key={index}>
-        {name}
-      </div>
-    ));
-  }
-
-  renderPossibleChords() {
-    const { notes } = this.state;
-
-    if (!notes.length) {
-      return;
+    if (midiInputDevice && !deviceSet) {
+      this.setState({ deviceSet: true }, () => {
+        midiInputDevice.addListener('noteon', 'all', this.onNoteOn);
+        midiInputDevice.addListener('noteoff', 'all', this.onNoteOff);
+      });
     }
+  }
 
-    const noteNames = notes.map(({ name }) => name);
+  componentWillUnmount() {
+    const { midiInputDevice } = this.props;
 
-    return (
-      <div className="possible-chords">
-        {`Possible Chords: ${chord(noteNames).join(', ')}`}
-      </div>
-    );
+    if (midiInputDevice) {
+      midiInputDevice.removeListener('noteon', 'all', this.onNoteOn);
+      midiInputDevice.removeListener('noteoff', 'all', this.onNoteOff);
+    }
   }
 
   renderPiano() {
@@ -140,11 +92,6 @@ class Piano extends Component {
   render() {
     return (
       <Fragment>
-        <div className="info">
-          {this.renderPossibleChords()}
-          {this.renderNotesPressed()}
-          {this.renderLesson()}
-        </div>
         <div className="piano">{this.renderPiano()}</div>
       </Fragment>
     );
