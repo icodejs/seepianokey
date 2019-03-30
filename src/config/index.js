@@ -18,7 +18,7 @@ export const notes = [
   'Eb',
   'E',
   'F',
-  'F#',
+  'Gb',
   'G',
   'Ab',
   'A',
@@ -26,13 +26,24 @@ export const notes = [
   'B'
 ];
 
-const flatToSharp = (note) => {
+export const flatToSharp = (note) => {
   const notes = {
     'Db': 'C#',
     'Eb': 'D#',
     'Gb': 'F#',
     'Ab': 'G#',
     'Bb': 'A#',
+  };
+  return notes[note] || note;
+};
+
+export const sharpToFlat = (note) => {
+  const notes = {
+    'C#': 'Db',
+    'D#': 'Eb',
+    'F#': 'Gb',
+    'G#': 'Ab',
+    'A#': 'Bb',
   };
   return notes[note] || note;
 };

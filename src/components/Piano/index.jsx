@@ -5,7 +5,7 @@ import React, { Component, Fragment } from 'react';
 // import webmidi from 'webmidi';
 import classNames from 'classnames';
 // import { scaleLesson } from '../../lessons/c-major';
-import { notes } from '../../config';
+import { notes, flatToSharp } from '../../config';
 import './Piano.scss';
 
 class Piano extends Component {
@@ -71,10 +71,11 @@ class Piano extends Component {
 
       return (
         <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
-          {[...Array(12)].map((k, index) => {
-            const note = notes[index];
+          {[...Array(12)].map((k, noteIndex) => {
+            const note = notes[noteIndex];
+
             const selected = this.state.notes.find(({ name, octave }) => {
-              return name === note && octave === pianoOctave;
+              return name === flatToSharp(note) && octave === pianoOctave;
             });
 
             return (
