@@ -1,7 +1,13 @@
 import React from 'react';
 
-export default ({ info }) => {
+export default ({ rows }) => {
   return (
-    <div className="info">{info}</div>
+    <div className="info">
+      {rows.map((row, index) => {
+        return (
+          <div key={`row-${index}`}>{row}</div>
+        )
+      })}
+    </div>
   );
 };

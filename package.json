@@ -13,6 +13,8 @@
     "react-scripts": "2.1.8",
     "tonal": "^2.2.1",
     "tonal-detect": "^2.2.1",
+    "tonal-note": "^2.2.1",
+    "tonal-scale": "^2.2.1",
     "webmidi": "^2.3.2"
   },
   "scripts": {

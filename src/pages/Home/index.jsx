@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import webmidi from 'webmidi';
+import { chord } from 'tonal-detect'
+import * as Note from 'tonal-note'
+import * as Scale from 'tonal-scale'
+
+
 import Piano from '../../components/Piano';
-import Display from "../../components/Display";
+import Display from '../../components/Display';
 import DeviceSelection from '../../components/DeviceSelection';
 import { addNote, removeNote } from '../../utils/notes';
 
@@ -14,6 +19,7 @@ class Home extends Component {
       midiInputs: [],
       selectedInput: null,
       notesPressed: [],
+      displayText: '',
     };
   }
 
@@ -64,36 +70,64 @@ class Home extends Component {
 
   // renderNotesPressed() {
   //   return this.state.notes.map(({ name }, index) => (
-  //     <div className="notes-pressed" key={index}>
+  //     <div className='notes-pressed' key={index}>
   //       {name}
   //     </div>
   //   ));
   // }
 
-  // renderPossibleChords() {
-  //   const { notes } = this.state;
+  renderPossibleChords() {
+    const { notesPressed } = this.state;
 
-  //   if (!notes.length) {
-  //     return;
-  //   }
+    if (!notesPressed.length) {
+      return;
+    }
 
-  //   const noteNames = notes.map(({ name }) => name);
+    const noteNames = notesPressed.map(({ name }) => name);
+    const results = chord(noteNames);
 
-  //   return (
-  //     <div className="possible-chords">
-  //       {`Possible Chords: ${chord(noteNames).join(', ')}`}
-  //     </div>
-  //   );
-  // }
+    if (!results.length) {
+      return;
+    }
+
+    return `Possible Chords: ${results.join(' | ')}`;
+  }
+
+  renderPossibleScale() {
+    const { notesPressed } = this.state;
+
+    if (!notesPressed.length) {
+      return;
+    }
+
+    const noteNames = notesPressed.map(({ name }) => name)
+
+    const results = Note.names(' #').map(n => {
+      return {
+        name: `${n} major`,
+        notes: Scale.notes(`${n} major`),
+      }
+    }).filter(s => {
+      return noteNames.every(n => s.notes.includes(n));
+    }).map(s => s.name);
+
+    if (!results.length) {
+      return;
+    }
+
+    return `Possible Scales: ${results.join(' | ')}`;
+  }
 
   render() {
     if (!this.state.midiSupported) {
-      return <div className="error">WebMidi is not supported</div>;
+      return <div className='error'>WebMidi is not supported</div>;
     }
+
+    const displayRows = [this.renderPossibleChords(), this.renderPossibleScale()];
 
     return (
       <div>
-        <Display />
+        <Display rows={displayRows} />
         <DeviceSelection
           midiInputs={this.state.midiInputs}
           onReceivedMidiInputs={this.handleReceivedMidiInputs}
