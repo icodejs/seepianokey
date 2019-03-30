@@ -12,7 +12,6 @@ class Piano extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      notes: [],
       deviceSet: false
     };
   }
@@ -29,18 +28,11 @@ class Piano extends Component {
   onNoteOn = e => {
     const note = this.parseNote(e);
     this.props.onNoteOn(note);
-    this.setState({
-      notes: [...this.state.notes, note].sort((a, b) => a.midiNote - b.midiNote)
-    });
   };
 
   onNoteOff = e => {
     const note = this.parseNote(e);
     this.props.onNoteOff(note);
-
-    this.setState({
-      notes: this.state.notes.filter(({ id }) => id !== note.id)
-    });
   };
 
   componentDidUpdate() {
@@ -74,7 +66,7 @@ class Piano extends Component {
           {[...Array(12)].map((k, noteIndex) => {
             const note = notes[noteIndex];
 
-            const selected = this.state.notes.find(({ name, octave }) => {
+            const selected = this.props.notesPressed.find(({ name, octave }) => {
               return name === flatToSharp(note) && octave === pianoOctave;
             });
 

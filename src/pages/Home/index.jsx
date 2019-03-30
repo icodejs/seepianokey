@@ -3,6 +3,8 @@ import webmidi from 'webmidi';
 import Piano from '../../components/Piano';
 import Display from "../../components/Display";
 import DeviceSelection from '../../components/DeviceSelection';
+import { addNote, removeNote } from '../../utils/notes';
+
 
 class Home extends Component {
   constructor(props) {
@@ -10,7 +12,8 @@ class Home extends Component {
     this.state = {
       midiSupported: false,
       midiInputs: [],
-      selectedInput: null
+      selectedInput: null,
+      notesPressed: [],
     };
   }
 
@@ -34,12 +37,18 @@ class Home extends Component {
     this.setState({ selectedInput });
   };
 
-  handleOnNoteOn(note) {
+  handleOnNoteOn = (note) => {
     console.log('Note on', note);
+    this.setState({
+      notesPressed: addNote(this.state.notesPressed)(note),
+    });
   }
 
-  handleOnNoteOff(note) {
+  handleOnNoteOff = (note) => {
     console.log('Note off', note);
+    this.setState({
+      notesPressed: removeNote(this.state.notesPressed)(note.id),
+    });
   }
 
   // renderLesson() {
@@ -94,6 +103,7 @@ class Home extends Component {
           onNoteOn={this.handleOnNoteOn}
           onNoteOff={this.handleOnNoteOff}
           midiInputDevice={this.state.selectedInput}
+          notesPressed={this.state.notesPressed}
         />
       </div>
     );
