@@ -7,6 +7,7 @@ import webmidi from 'webmidi';
 import { chord } from 'tonal-detect'
 import * as Note from 'tonal-note'
 import * as Scale from 'tonal-scale'
+import * as R from 'ramda'
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
@@ -96,7 +97,7 @@ class Home extends Component {
       return;
     }
 
-    const noteNames = notesPressed.map(({ name }) => name);
+    const noteNames = notesPressed.map(R.prop('id'));
     const results = chord(noteNames);
 
     if (!results.length) {
@@ -113,7 +114,7 @@ class Home extends Component {
       return;
     }
 
-    const noteNames = notesPressed.map(({ name }) => name)
+    const noteNames = notesPressed.map(R.prop('name'))
 
     const results = Note.names(' #').map(n => {
       return {
@@ -122,7 +123,7 @@ class Home extends Component {
       }
     }).filter(s => {
       return noteNames.every(n => s.notes.includes(n));
-    }).map(s => s.name);
+    }).map(R.prop('name'));
 
     if (!results.length) {
       return;
@@ -138,7 +139,10 @@ class Home extends Component {
       return <div className='error'>WebMidi is not supported</div>;
     }
 
-    const displayRows = [this.renderPossibleChords(), this.renderPossibleScale()];
+    const displayRows = [
+      this.renderPossibleChords(),
+      this.renderPossibleScale()
+    ];
 
     return (
       <div>
