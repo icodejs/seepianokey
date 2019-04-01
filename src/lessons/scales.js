@@ -1,6 +1,6 @@
 import * as Scale from "tonal-scale";
 
-export const scaleLesson = () => {
+export default () => {
   const scaleBase = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
   const scaleForwards = [...scaleBase, scaleBase[0]];
   const scaleBackwards = [...scaleForwards].reverse();

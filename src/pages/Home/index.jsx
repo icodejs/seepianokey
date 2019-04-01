@@ -12,9 +12,11 @@ import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import DeviceSelection from '../../components/DeviceSelection';
 import LessonSelector from '../../components/LessonSelector';
+import Scales from '../../components/Lessons';
 import { addNote, removeNote } from '../../utils/notes';
 
 const lessons = ['scales', 'chords'];
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -130,7 +132,9 @@ class Home extends Component {
   }
 
   render() {
-    if (!this.state.midiSupported) {
+    const { notesPressed, midiSupported, selectedInput, selectedLesson, midiInputs } = this.state;
+
+    if (!midiSupported) {
       return <div className='error'>WebMidi is not supported</div>;
     }
 
@@ -139,21 +143,26 @@ class Home extends Component {
     return (
       <div>
         <Display rows={displayRows} />
+        {
+          selectedLesson !== -1
+            ? <Scales notes={notesPressed} />
+            : null
+        }
         <DeviceSelection
-          midiInputs={this.state.midiInputs}
+          midiInputs={midiInputs}
           onReceivedMidiInputs={this.handleReceivedMidiInputs}
           onDeviceSelection={this.handleDeviceSelection}
         />
         <LessonSelector
           lessons={lessons}
-          selectedLesson={this.state.selectedLesson}
+          selectedLesson={selectedLesson}
           onLessonSelection={this.handleLessonSelection}
         />
         <Piano
           onNoteOn={this.handleOnNoteOn}
           onNoteOff={this.handleOnNoteOff}
-          midiInputDevice={this.state.selectedInput}
-          notesPressed={this.state.notesPressed}
+          midiInputDevice={selectedInput}
+          notesPressed={notesPressed}
         />
       </div>
     );
