@@ -1,10 +1,5 @@
-// https://www.scales-chords.com/chord/piano/Bdim
-// import { chord } from "tonal-detect"
 import React, { Component, Fragment } from 'react';
-// import * as R from 'ramda';
-// import webmidi from 'webmidi';
 import classNames from 'classnames';
-// import { scaleLesson } from '../../lessons/c-major';
 import { notes, flatToSharp } from '../../config';
 import './Piano.scss';
 

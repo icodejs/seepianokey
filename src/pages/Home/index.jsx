@@ -1,25 +1,30 @@
+/// https://www.8notes.com/resources/notefinders/piano_chords.asp
+/// https://cifkao.github.io/tonnetz-viz/
+/// https://danigb.github.io/tonal-app/#/C
+
 import React, { Component } from 'react';
 import webmidi from 'webmidi';
 import { chord } from 'tonal-detect'
 import * as Note from 'tonal-note'
 import * as Scale from 'tonal-scale'
 
-
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import DeviceSelection from '../../components/DeviceSelection';
+import LessonSelector from '../../components/LessonSelector';
 import { addNote, removeNote } from '../../utils/notes';
 
-
+const lessons = ['scales', 'chords'];
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       midiSupported: false,
       midiInputs: [],
-      selectedInput: null,
+      selectedInput: -1,
       notesPressed: [],
       displayText: '',
+      selectedLesson: -1,
     };
   }
 
@@ -42,6 +47,12 @@ class Home extends Component {
   handleDeviceSelection = selectedInput => {
     this.setState({ selectedInput });
   };
+
+  handleLessonSelection = event => {
+    this.setState({
+      selectedLesson: event.target.value,
+    })
+  }
 
   handleOnNoteOn = (note) => {
     console.log('Note on', note);
@@ -132,6 +143,11 @@ class Home extends Component {
           midiInputs={this.state.midiInputs}
           onReceivedMidiInputs={this.handleReceivedMidiInputs}
           onDeviceSelection={this.handleDeviceSelection}
+        />
+        <LessonSelector
+          lessons={lessons}
+          selectedLesson={this.state.selectedLesson}
+          onLessonSelection={this.handleLessonSelection}
         />
         <Piano
           onNoteOn={this.handleOnNoteOn}
