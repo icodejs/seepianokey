@@ -1,13 +1,17 @@
 /// https://www.8notes.com/resources/notefinders/piano_chords.asp
 /// https://cifkao.github.io/tonnetz-viz/
 /// https://danigb.github.io/tonal-app/#/C
+/// https://www.cs.hmc.edu/~keller/jazz/improvisor/Scales.html
 
 import React, { Component } from 'react';
 import webmidi from 'webmidi';
+import * as R from 'ramda'
+
+import { Chord } from "tonal";
 import { chord } from 'tonal-detect'
 import * as Note from 'tonal-note'
 import * as Scale from 'tonal-scale'
-import * as R from 'ramda'
+import * as Key from "tonal-key";
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
@@ -15,8 +19,6 @@ import DeviceSelection from '../../components/DeviceSelection';
 import LessonSelector from '../../components/LessonSelector';
 import Scales from '../../components/Lessons';
 import { addNote, removeNote } from '../../utils/notes';
-
-const lessons = ['scales', 'chords'];
 
 class Home extends Component {
   constructor(props) {
@@ -134,6 +136,7 @@ class Home extends Component {
 
   render() {
     const { notesPressed, midiSupported, selectedInput, selectedLesson, midiInputs } = this.state;
+    const lessons = ['scales', 'chords'];
 
     if (!midiSupported) {
       return <div className='error'>WebMidi is not supported</div>;
@@ -143,6 +146,22 @@ class Home extends Component {
       this.renderPossibleChords(),
       this.renderPossibleScale()
     ];
+
+    // This game will cycle through C chords and ask you to play them
+    Chord.names().map(c => console.log(
+      `C: ${c}`,
+      Chord.notes('C', c)
+    ));
+    console.log('------------');
+
+    // https://github.com/danigb/tonal/tree/master/extensions/key
+    // Game to play all chords in the key of C
+    // Also limit to progression using: Key.chords("A major", [5, 4, 1]) // => ["E7", "DMaj7", AMaj7"]
+    Key.chords('Db major').map(c => console.log(
+      `Chords in C: ${c}`,
+      Chord.notes(c)
+    ));
+    console.log('============');
 
     return (
       <div>

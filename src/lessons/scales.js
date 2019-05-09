@@ -1,3 +1,4 @@
+/// https://github.com/danigb/tonal/tree/master/extensions/key#module_Key.scale
 import * as Scale from "tonal-scale";
 
 export default () => {
