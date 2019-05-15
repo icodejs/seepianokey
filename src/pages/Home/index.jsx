@@ -171,6 +171,13 @@ class Home extends Component {
     // ));
     // console.log('============');
 
+    // http://danigb.github.io/tonal/module-Detect.html#~chord
+    // Given a collection of notes, find the chord name.
+    // Use this to verify chord has been pressed correctly
+
+    // http://danigb.github.io/tonal/module-Interval.html#~names
+    // List basic (perfect, major, minor) interval names within a octave
+
     return (
       <div>
         <Display rows={displayRows} />
