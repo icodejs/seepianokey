@@ -16,6 +16,7 @@ import * as Key from "tonal-key";
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import DeviceSelection from '../../components/DeviceSelection';
+import NoteSelector from '../../components/NoteSelector';
 import LessonSelector from '../../components/LessonSelector';
 import Scales from '../../components/Lessons';
 import { addNote, removeNote } from '../../utils/notes';
@@ -30,6 +31,7 @@ class Home extends Component {
       notesPressed: [],
       displayText: '',
       selectedLesson: -1,
+      selectedChordKey: 'C',
     };
   }
 
@@ -70,6 +72,12 @@ class Home extends Component {
     console.log('Note off', note);
     this.setState({
       notesPressed: removeNote(this.state.notesPressed)(note.id),
+    });
+  }
+
+  handleChordKeySelected = (selectedChordKey) => {
+    this.setState({
+      selectedChordKey,
     });
   }
 
@@ -135,7 +143,7 @@ class Home extends Component {
   }
 
   render() {
-    const { notesPressed, midiSupported, selectedInput, selectedLesson, midiInputs } = this.state;
+    const { notesPressed, midiSupported, selectedInput, selectedLesson, midiInputs, selectedChordKey } = this.state;
     const lessons = ['scales', 'chords'];
 
     if (!midiSupported) {
@@ -148,20 +156,20 @@ class Home extends Component {
     ];
 
     // This game will cycle through C chords and ask you to play them
-    Chord.names().map(c => console.log(
-      `C: ${c}`,
-      Chord.notes('C', c)
-    ));
-    console.log('------------');
+    // Chord.names().map(c => console.log(
+    //   `C: ${c}`,
+    //   Chord.notes('C', c)
+    // ));
+    // console.log('------------');
 
     // https://github.com/danigb/tonal/tree/master/extensions/key
     // Game to play all chords in the key of C
     // Also limit to progression using: Key.chords("A major", [5, 4, 1]) // => ["E7", "DMaj7", AMaj7"]
-    Key.chords('Db major').map(c => console.log(
-      `Chords in C: ${c}`,
-      Chord.notes(c)
-    ));
-    console.log('============');
+    // Key.chords('Db major').map(c => console.log(
+    //   `Chords in C: ${c}`,
+    //   Chord.notes(c)
+    // ));
+    // console.log('============');
 
     return (
       <div>
@@ -181,6 +189,11 @@ class Home extends Component {
           selectedLesson={selectedLesson}
           onLessonSelection={this.handleLessonSelection}
         />
+        {
+          selectedLesson === 'chords'
+          ? <NoteSelector onNoteSelected={this.handleChordKeySelected} />
+          : null
+        }
         <Piano
           onNoteOn={this.handleOnNoteOn}
           onNoteOff={this.handleOnNoteOff}
