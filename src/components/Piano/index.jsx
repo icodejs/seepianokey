@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { notes, flatToSharp } from '../../config';
+import { flatNotes, flatToSharp } from '../../config';
 import './Piano.scss';
 
 class Piano extends Component {
@@ -59,7 +59,7 @@ class Piano extends Component {
       return (
         <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
           {[...Array(12)].map((k, noteIndex) => {
-            const note = notes[noteIndex];
+            const note = flatNotes[noteIndex];
 
             const selected = this.props.notesPressed.find(({ name, octave }) => {
               return name === flatToSharp(note) && octave === pianoOctave;

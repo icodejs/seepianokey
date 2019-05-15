@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 import envalid from 'envalid';
 import { Scale, scale, transpose } from 'tonal';
 
-
 config();
 
 const { str } = envalid;
@@ -10,21 +9,6 @@ const { str } = envalid;
 export const env = envalid.cleanEnv(process.env, {
   DEFAULT_CONTROLLER: str({ default: 'APC' }),
 });
-
-export const notes = [
-  'C',
-  'Db',
-  'D',
-  'Eb',
-  'E',
-  'F',
-  'Gb',
-  'G',
-  'Ab',
-  'A',
-  'Bb',
-  'B'
-];
 
 export const flatToSharp = (note) => {
   const notes = {
@@ -36,6 +20,32 @@ export const flatToSharp = (note) => {
   };
   return notes[note] || note;
 };
+
+export const notes = [
+  'C',
+  'C#',
+  'Db',
+  'D',
+  'D#',
+  'Eb',
+  'E',
+  'F',
+  'F#',
+  'Gb',
+  'G',
+  'G#',
+  'Ab',
+  'A',
+  'A#',
+  'Bb',
+  'B'
+];
+
+export const flatNotes = notes.filter((n) =>
+  n.indexOf('#') === -1);
+
+export const sharpNotes = notes.filter((n) =>
+  n.indexOf('b') === -1);
 
 export const sharpToFlat = (note) => {
   const notes = {
@@ -77,17 +87,3 @@ const modules = [
 // console.log(Scale.names());
 // console.log(modules);
 
-/*
-  'C',
-  'C#-Db',
-  'D',
-  'D#-Eb',
-  'E',
-  'F',
-  'F#-Gb',
-  'G',
-  'G#-Ab',
-  'A',
-  'A#-Bb',
-  'B'
-*/
