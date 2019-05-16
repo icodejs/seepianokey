@@ -13,18 +13,23 @@ export const env = envalid.cleanEnv(process.env, {
 export const octavesOptions = [{
   keys: 25,
   octaves: 2,
+  startingOctave: 3,
 }, {
   keys: 49,
   octaves: 4,
+  startingOctave: 2,
 }, {
   keys: 61,
   octaves: 5,
+  startingOctave: 2,
 }, {
   keys: 76,
   octaves: 6,
+  startingOctave: 1,
 }, {
   keys: 88,
   octaves: 7,
+  startingOctave: 1,
 }];
 
 export const flatToSharp = (note) => {

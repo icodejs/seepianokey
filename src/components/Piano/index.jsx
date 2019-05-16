@@ -8,7 +8,7 @@ class Piano extends Component {
     super(props);
     this.state = {
       deviceSet: false,
-      keyboardKeys: 2,
+      keyboardOctaves: 2,
     };
   }
 
@@ -53,17 +53,17 @@ class Piano extends Component {
   }
 
   handleKeyboardKeysSelection = event => {
-    const { value: keyboardKeys } = event.target;
-    this.setState({ keyboardKeys: parseInt(keyboardKeys, 10) });
+    const { value: keyboardOctaves } = event.target;
+    this.setState({ keyboardOctaves: parseInt(keyboardOctaves, 10) });
   };
 
   renderKeyboardKeysSelector() {
-    const { keyboardKeys } = this.state;
+    const { keyboardOctaves } = this.state;
     return (
       <form className="octave-selector">
         <label>
           <select
-            value={keyboardKeys}
+            value={keyboardOctaves}
             onChange={this.handleKeyboardKeysSelection}
           >
             {octavesOptions.map(({ keys, octaves }) => {
@@ -100,11 +100,14 @@ class Piano extends Component {
   }
 
   renderPiano() {
-    const { keyboardKeys } = this.state;
-    return [...Array(keyboardKeys)].map((o, index) => {
-      const startingOctave = 3;
+    const { keyboardOctaves } = this.state;
+    const octavesOption = octavesOptions.find(
+      ({ octaves }) => octaves === keyboardOctaves
+    );
+
+    return [...Array(keyboardOctaves)].map((o, index) => {
       const keysPerOctave = 12;
-      const pianoOctave = index + startingOctave;
+      const pianoOctave = index + octavesOption.startingOctave;
 
       return (
         <ul
