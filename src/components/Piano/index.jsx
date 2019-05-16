@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { flatNotes, flatToSharp } from '../../config';
+import { flatNotes, flatToSharp, octavesOptions } from '../../config';
 import './Piano.scss';
 
 class Piano extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deviceSet: false
+      deviceSet: false,
+      keyboardKeys: 2,
     };
   }
 
@@ -51,27 +52,62 @@ class Piano extends Component {
     }
   }
 
+  handleKeyboardKeysSelection = event => {
+    const { value: keyboardKeys } = event.target;
+    this.setState({ keyboardKeys: parseInt(keyboardKeys, 10) });
+  };
+
+  renderKeyboardKeysSelector() {
+    const { keyboardKeys } = this.state;
+    return (
+      <form className="octave-selector">
+        <label>
+          <select
+            value={keyboardKeys}
+            onChange={this.handleKeyboardKeysSelection}
+          >
+            {octavesOptions.map(({ keys, octaves }) => {
+              return (
+                <option key={octaves} value={octaves}>
+                  {`${keys}-key keyboard`}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+      </form>
+    )
+  }
+
+  renderNote = (pianoOctave) => (k, noteIndex) => {
+    const note = flatNotes[noteIndex];
+    const selected = this.props.notesPressed.find(({
+      name,
+      octave
+    }) => {
+      return name === flatToSharp(note) && octave === pianoOctave;
+    });
+
+    return (
+      <li
+        key={`${note}_${pianoOctave}`}
+        className={classNames(`${note}_${pianoOctave}`, { selected })}
+      />
+    );
+  }
+
   renderPiano() {
-    const octaves = 2;
-    return [...Array(octaves)].map((o, index) => {
+    const { keyboardKeys } = this.state;
+    return [...Array(keyboardKeys)].map((o, index) => {
       const pianoOctave = index + 3;
+      const keysPerOctave = 12;
 
       return (
-        <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
-          {[...Array(12)].map((k, noteIndex) => {
-            const note = flatNotes[noteIndex];
-
-            const selected = this.props.notesPressed.find(({ name, octave }) => {
-              return name === flatToSharp(note) && octave === pianoOctave;
-            });
-
-            return (
-              <li
-                key={`${note}_${pianoOctave}`}
-                className={classNames(`${note}_${pianoOctave}`, { selected })}
-              />
-            );
-          })}
+        <ul
+          key={`octave-${pianoOctave}`}
+          className={`octave-${pianoOctave}`}
+        >
+          {[...Array(keysPerOctave)].map(this.renderNote(pianoOctave))}
         </ul>
       );
     });
@@ -80,7 +116,10 @@ class Piano extends Component {
   render() {
     return (
       <Fragment>
-        <div className="piano">{this.renderPiano()}</div>
+        {this.renderKeyboardKeysSelector()}
+        <div className="piano">
+          {this.renderPiano()}
+        </div>
       </Fragment>
     );
   }

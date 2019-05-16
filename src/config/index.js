@@ -10,6 +10,23 @@ export const env = envalid.cleanEnv(process.env, {
   DEFAULT_CONTROLLER: str({ default: 'APC' }),
 });
 
+export const octavesOptions = [{
+  keys: 25,
+  octaves: 2,
+}, {
+  keys: 49,
+  octaves: 4,
+}, {
+  keys: 61,
+  octaves: 5,
+}, {
+  keys: 76,
+  octaves: 6,
+}, {
+  keys: 88,
+  octaves: 7,
+}];
+
 export const flatToSharp = (note) => {
   const notes = {
     'Db': 'C#',
