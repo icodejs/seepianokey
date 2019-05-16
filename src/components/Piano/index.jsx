@@ -80,18 +80,21 @@ class Piano extends Component {
   }
 
   renderNote = (pianoOctave) => (k, noteIndex) => {
+    const { onNoteClick, notesPressed } = this.props;
     const note = flatNotes[noteIndex];
-    const selected = this.props.notesPressed.find(({
+    const selected = notesPressed.find(({
       name,
       octave
     }) => {
       return name === flatToSharp(note) && octave === pianoOctave;
     });
+    const noteId = `${note}_${pianoOctave}`;
 
     return (
       <li
-        key={`${note}_${pianoOctave}`}
-        className={classNames(`${note}_${pianoOctave}`, { selected })}
+        key={noteId}
+        onClick={(e) => onNoteClick(noteId)}
+        className={classNames(noteId, { selected })}
       />
     );
   }

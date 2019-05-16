@@ -83,6 +83,10 @@ class Home extends Component {
     });
   }
 
+  handleNoteClick(noteClicked) {
+    console.log(noteClicked);
+  }
+
   // renderLesson() {
   //   const { correct, progress, complete } = this.state.lesson;
   //   return (
@@ -218,6 +222,7 @@ class Home extends Component {
           onNoteOff={this.handleOnNoteOff}
           midiInputDevice={selectedInput}
           notesPressed={notesPressed}
+          onNoteClick={this.handleNoteClick}
         />
       </div>
     );
