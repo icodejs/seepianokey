@@ -102,8 +102,9 @@ class Piano extends Component {
   renderPiano() {
     const { keyboardKeys } = this.state;
     return [...Array(keyboardKeys)].map((o, index) => {
-      const pianoOctave = index + 3;
+      const startingOctave = 3;
       const keysPerOctave = 12;
+      const pianoOctave = index + startingOctave;
 
       return (
         <ul
