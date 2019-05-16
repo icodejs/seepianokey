@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { notes } from '../../config';
 
+import './NoteSelector.scss';
 
 class DeviceSelection extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class DeviceSelection extends Component {
 
   render() {
     return (
-      <form>
+      <form className="note-selector">
         <label>
           <select
             value={this.state.noteSelected}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import webmidi from 'webmidi';
-import { env } from '../../config';
+
+import './DeviceSelection.scss';
 
 class DeviceSelection extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class DeviceSelection extends Component {
     }
 
     return (
-      <form>
+      <form className="device-selection">
         <label>
           <select
             value={this.state.selectedDeviceName}

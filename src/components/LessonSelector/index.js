@@ -1,6 +1,9 @@
 import React from 'react';
+
+import './LessonSelector.scss';
+
 export default ({ lessons, selectedLesson, onLessonSelection }) => (
-  <form>
+  <form className="lesson-selector">
     <label>
       <select
         value={selectedLesson}

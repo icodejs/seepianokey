@@ -21,6 +21,8 @@ import LessonSelector from '../../components/LessonSelector';
 import Scales from '../../components/Lessons';
 import { addNote, removeNote } from '../../utils/notes';
 
+import './Home.scss';
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -142,9 +144,33 @@ class Home extends Component {
     return `Possible Scales: ${results.join(' | ')}`;
   }
 
-  render() {
-    const { notesPressed, midiSupported, selectedInput, selectedLesson, midiInputs, selectedChordKey } = this.state;
+  renderLessonOptions() {
+    const { midiInputs, selectedLesson } = this.state;
     const lessons = ['scales', 'chords'];
+
+    return (
+      <div className="lesson-options">
+        <DeviceSelection
+          midiInputs={midiInputs}
+          onReceivedMidiInputs={this.handleReceivedMidiInputs}
+          onDeviceSelection={this.handleDeviceSelection}
+        />
+        <LessonSelector
+          lessons={lessons}
+          selectedLesson={selectedLesson}
+          onLessonSelection={this.handleLessonSelection}
+        />
+        {
+          selectedLesson === 'chords'
+            ? <NoteSelector onNoteSelected={this.handleChordKeySelected} />
+            : null
+        }
+      </div>
+    )
+  }
+
+  render() {
+    const { notesPressed, midiSupported, selectedInput, selectedLesson } = this.state;
 
     if (!midiSupported) {
       return <div className='error'>WebMidi is not supported</div>;
@@ -179,27 +205,13 @@ class Home extends Component {
     // List basic (perfect, major, minor) interval names within a octave
 
     return (
-      <div>
+      <div className="home">
+        {this.renderLessonOptions()}
         <Display rows={displayRows} />
         {
           selectedLesson !== -1
             ? <Scales notes={notesPressed} />
             : null
-        }
-        <DeviceSelection
-          midiInputs={midiInputs}
-          onReceivedMidiInputs={this.handleReceivedMidiInputs}
-          onDeviceSelection={this.handleDeviceSelection}
-        />
-        <LessonSelector
-          lessons={lessons}
-          selectedLesson={selectedLesson}
-          onLessonSelection={this.handleLessonSelection}
-        />
-        {
-          selectedLesson === 'chords'
-          ? <NoteSelector onNoteSelected={this.handleChordKeySelected} />
-          : null
         }
         <Piano
           onNoteOn={this.handleOnNoteOn}
