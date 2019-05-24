@@ -7,11 +7,11 @@ import React, { Component } from 'react';
 import webmidi from 'webmidi';
 import * as R from 'ramda'
 
-import { Chord } from "tonal";
+// import { Chord } from "tonal";
 import { chord } from 'tonal-detect'
 import * as Note from 'tonal-note'
 import * as Scale from 'tonal-scale'
-import * as Key from "tonal-key";
+// import * as Key from "tonal-key";
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
@@ -210,7 +210,9 @@ class Home extends Component {
     // Use this to verify chord has been pressed correctly
 
     // http://danigb.github.io/tonal/module-Interval.html#~names
-    // List basic (perfect, major, minor) interval names within a octave
+
+    // https://trello.com/c/Yu9jSm8X/5-midiaccess-web-apis-mdn#comment-5ce571a5284d1837556e7516
+
 
     return (
       <div className="home">
