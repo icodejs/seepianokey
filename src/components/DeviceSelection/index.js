@@ -19,7 +19,8 @@ class DeviceSelection extends Component {
 
   setDevice(selectedDeviceName) {
     const input = webmidi.getInputByName(selectedDeviceName);
-    this.props.onDeviceSelection(input);
+    const output = webmidi.getOutputByName(selectedDeviceName);
+    this.props.onDeviceSelection({ input, output });
   }
 
   handleDeviceSelection = event => {

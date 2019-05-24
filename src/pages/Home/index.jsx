@@ -30,6 +30,7 @@ class Home extends Component {
       midiSupported: false,
       midiInputs: [],
       selectedInput: -1,
+      selectedOutput: -1,
       notesPressed: [],
       displayText: '',
       selectedLesson: -1,
@@ -53,8 +54,11 @@ class Home extends Component {
     });
   };
 
-  handleDeviceSelection = selectedInput => {
-    this.setState({ selectedInput });
+  handleDeviceSelection = ({ input, output }) => {
+    this.setState({
+      selectedInput: input,
+      selectedOutput: output,
+    });
   };
 
   handleLessonSelection = event => {
