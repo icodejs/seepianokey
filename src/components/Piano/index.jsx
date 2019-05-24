@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import * as Note from 'tonal-note'
 import { flatNotes, flatToSharp, octavesOptions } from '../../config';
+import { addNote, removeNote, containsNote } from '../../utils/notes';
 import './Piano.scss';
 
 class Piano extends Component {
@@ -10,6 +11,7 @@ class Piano extends Component {
     this.state = {
       deviceSet: false,
       keyboardOctaves: 2,
+      notesPressed: [],
     };
   }
 
@@ -76,8 +78,24 @@ class Piano extends Component {
       name: note,
     };
 
-    // this.props.onNoteOn(event);
+    this.toggleNote(event);
     onNoteClick(event);
+  }
+
+  toggleNote(note) {
+    if (containsNote(this.state.notesPressed, note.id)) {
+      this.props.onNoteOff(note);
+
+      this.setState({
+        notesPressed: removeNote(this.state.notesPressed)(note.id),
+      });
+    } else {
+      this.props.onNoteOn(note);
+
+      this.setState({
+        notesPressed: addNote(this.state.notesPressed)(note),
+      });
+    }
   }
 
   renderKeyboardKeysSelector() {
