@@ -123,11 +123,9 @@ class Piano extends Component {
   renderNote = (pianoOctave) => (k, noteIndex) => {
     const { notesPressed } = this.props;
     const note = flatNotes[noteIndex];
-    const selected = notesPressed.find(({
-      name,
-      octave
-    }) => {
-      return name === flatToSharp(note) && octave === pianoOctave;
+    const selected = notesPressed.find(({ name, octave }) => {
+      return  flatToSharp(name) === flatToSharp(note) &&
+              octave === pianoOctave;
     });
     const noteId = `${note}_${pianoOctave}`;
 
