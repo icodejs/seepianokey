@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
+import * as Note from 'tonal-note'
 import { flatNotes, flatToSharp, octavesOptions } from '../../config';
 import './Piano.scss';
 
@@ -17,6 +18,9 @@ class Piano extends Component {
       id: event.note.name + event.note.octave,
       midiNote: event.note.number,
       rawVelocity: event.rawVelocity,
+      timestamp: event.timestamp,
+      target: event.target,
+      channel: event.channel,
       ...event.note
     };
   }
@@ -57,6 +61,25 @@ class Piano extends Component {
     this.setState({ keyboardOctaves: parseInt(keyboardOctaves, 10) });
   };
 
+  handleNoteClicked = (note, pianoOctave) => (e) => {
+    const { onNoteClick } = this.props;
+    const id = note + pianoOctave;
+    const event = {
+      id,
+      midiNote: Note.midi(id),
+      timestamp: new Date().getTime(),
+      target: 'Mouse click',
+      rawVelocity: 127,
+      channel: 1,
+      octave: pianoOctave,
+      number: Note.midi(id),
+      name: note,
+    };
+
+    // this.props.onNoteOn(event);
+    onNoteClick(event);
+  }
+
   renderKeyboardKeysSelector() {
     const { keyboardOctaves } = this.state;
     return (
@@ -80,7 +103,7 @@ class Piano extends Component {
   }
 
   renderNote = (pianoOctave) => (k, noteIndex) => {
-    const { onNoteClick, notesPressed } = this.props;
+    const { notesPressed } = this.props;
     const note = flatNotes[noteIndex];
     const selected = notesPressed.find(({
       name,
@@ -93,7 +116,7 @@ class Piano extends Component {
     return (
       <li
         key={noteId}
-        onClick={(e) => onNoteClick(noteId)}
+        onClick={this.handleNoteClicked(note, pianoOctave)}
         className={classNames(noteId, { selected })}
       />
     );
