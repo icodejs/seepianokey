@@ -4,35 +4,24 @@ import webmidi from 'webmidi';
 import './DeviceSelection.scss';
 
 class DeviceSelection extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedDeviceName: 'APC Key 25'
-    };
-  }
-
   componentDidMount() {
     this.props.onReceivedMidiInputs([...webmidi.inputs]);
-    this.setDevice(this.state.selectedDeviceName);
-  }
-
-  setDevice(selectedDeviceName) {
-    const input = webmidi.getInputByName(selectedDeviceName);
-    const output = webmidi.getOutputByName(selectedDeviceName);
-    this.props.onDeviceSelection({ input, output });
   }
 
   handleDeviceSelection = event => {
     const { value: selectedDeviceName } = event.target;
-    this.setState({ selectedDeviceName });
-    this.setDevice(selectedDeviceName);
+    const input = webmidi.getInputByName(selectedDeviceName);
+    const output = webmidi.getOutputByName(selectedDeviceName);
+
+    this.props.onDeviceSelection({ input, output, selectedDeviceName });
 
     // changing the midi device should remove listener from the prev device
   };
 
   render() {
-    if (!this.props.midiInputs) {
+    const { midiInputs } = this.props;
+
+    if (midiInputs && midiInputs.length === 0) {
       return <div className="device-selection">No Midi devices found.</div>;
     }
 
@@ -40,7 +29,7 @@ class DeviceSelection extends Component {
       <form className="device-selection">
         <label>
           <select
-            value={this.state.selectedDeviceName}
+            value={this.props.selectedDeviceName}
             onChange={this.handleDeviceSelection}
           >
             <option value="-1">Choose device</option>
