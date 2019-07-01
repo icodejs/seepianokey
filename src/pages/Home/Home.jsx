@@ -5,6 +5,7 @@
 /// https://github.com/djipco/webmidi/blob/master/docs/latest/data.json#L973
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import webmidi from 'webmidi';
 import * as R from 'ramda'
 
@@ -223,11 +224,13 @@ class Home extends Component {
       <div className="home">
         {this.renderLessonOptions()}
         <Display rows={displayRows} />
+
         {
           selectedLesson !== -1
             ? <Scales notes={notesPressed} />
             : null
         }
+
         <Piano
           onNoteOn={this.handleOnNoteOn}
           onNoteOff={this.handleOnNoteOff}
@@ -238,6 +241,11 @@ class Home extends Component {
       </div>
     );
   }
+}
+
+Home.propTypes = {
+  selectMidiController: PropTypes.func.isRequired,
+  selectedDeviceName: PropTypes.string,
 }
 
 export default Home;

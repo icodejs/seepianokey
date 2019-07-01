@@ -1,5 +1,5 @@
 /// https://github.com/danigb/tonal/tree/master/extensions/key#module_Key.scale
-import * as Scale from "tonal-scale";
+// import * as Scale from "tonal-scale";
 
 export default () => {
   const scaleBase = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];

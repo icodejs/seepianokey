@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import envalid from 'envalid';
-import { Scale, scale, transpose } from 'tonal';
+// import { Scale, scale, transpose } from 'tonal';
 
 config();
 
@@ -80,31 +80,32 @@ export const sharpToFlat = (note) => {
   return notes[note] || note;
 };
 
-const modules = [
-  {
-    id: 'scales',
-    title: 'Learn Scales',
-    description: 'Pick a scale and practice.',
-    level: '01',
-    tasks: [
-      {
-        id: 'majorScales',
-        title: 'Major Scales',
-        lessons: notes.map((note, index) => ({
-          title: `${flatToSharp(note)} Major Scale`,
-          id: flatToSharp(note),
-          lessonNumber: index + 1,
-          sequence: Scale.notes(`${note} major`),
-        }))
-      },
-      {
-        id: 'minorScales',
-        title: 'Minor Scales',
-        // ...
-      }
-    ]
-  }
-]; // e.g. Scale training || Chord training || Timing || Find Key || Chord progression training
+// const modules = [
+//   {
+//     id: 'scales',
+//     title: 'Learn Scales',
+//     description: 'Pick a scale and practice.',
+//     level: '01',
+//     tasks: [
+//       {
+//         id: 'majorScales',
+//         title: 'Major Scales',
+//         lessons: notes.map((note, index) => ({
+//           title: `${flatToSharp(note)} Major Scale`,
+//           id: flatToSharp(note),
+//           lessonNumber: index + 1,
+//           sequence: Scale.notes(`${note} major`),
+//         }))
+//       },
+//       {
+//         id: 'minorScales',
+//         title: 'Minor Scales',
+//         // ...
+//       }
+//     ]
+//   }
+// ];
+// e.g. Scale training || Chord training || Timing || Find Key || Chord progression training
 
 // console.log(Scale.names());
 // console.log(modules);

@@ -1,8 +1,16 @@
-import { SELECT_MIDI_CONTROLLER } from './action-types';
+import {
+  SELECT_MIDI_CONTROLLER,
+  SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
+} from './action-types';
 
-export function selectMidiController(selectedDeviceName) {
-  return {
-    type: SELECT_MIDI_CONTROLLER,
-    selectedDeviceName,
-  };
-}
+export const  selectMidiController = (selectedDeviceName) => ({
+  type: SELECT_MIDI_CONTROLLER,
+  selectedDeviceName,
+});
+
+export const selectNumberOfKeyboardOctaves = ({
+  numberOfKeyboardOctaves
+}) => ({
+  type: SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
+  numberOfKeyboardOctaves,
+})

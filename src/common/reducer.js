@@ -1,4 +1,7 @@
-import { SELECT_MIDI_CONTROLLER } from './action-types';
+import {
+  SELECT_MIDI_CONTROLLER,
+  SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
+} from './action-types';
 
 const initialState = {
   selectedDeviceName: 'APC Key 25',
@@ -11,6 +14,11 @@ function seePianoKeyApp(state = initialState, action) {
         ...state,
         selectedDeviceName: action.selectedDeviceName
       };
+    case SELECT_NUMBER_OF_KEYBOARD_OCTAVES:
+      return {
+        ...state,
+        numberOfKeyboardOctaves: action.numberOfKeyboardOctaves
+      }
     default:
       return state;
   }
