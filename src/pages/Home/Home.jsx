@@ -58,7 +58,7 @@ class Home extends Component {
   };
 
   handleDeviceSelection = ({ input, output, selectedDeviceName }) => {
-    this.props.selectMidiController(selectedDeviceName);
+    this.props.selectMidiController({ selectedDeviceName });
     this.setState({
       selectedInput: input,
       selectedOutput: output,
