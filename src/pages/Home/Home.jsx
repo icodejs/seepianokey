@@ -221,7 +221,7 @@ class Home extends Component {
 
 
     return (
-      <div className="home">
+      <div className="Home">
         {this.renderLessonOptions()}
         <Display rows={displayRows} />
 
