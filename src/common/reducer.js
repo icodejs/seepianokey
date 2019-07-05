@@ -1,10 +1,12 @@
 import {
   SELECT_MIDI_CONTROLLER,
   SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
+  SET_WEB_MIDI_SUPPORTED,
 } from './action-types';
 
-const initialState = {
+export const initialState = {
   selectedDeviceName: 'APC Key 25',
+  webMidiSupported: false,
 };
 
 function seePianoKeyApp(state = initialState, action) {
@@ -19,6 +21,11 @@ function seePianoKeyApp(state = initialState, action) {
         ...state,
         numberOfKeyboardOctaves: action.numberOfKeyboardOctaves
       }
+    case SET_WEB_MIDI_SUPPORTED:
+      return {
+        ...state,
+        webMidiSupported: action.webMidiSupported,
+      };
     default:
       return state;
   }

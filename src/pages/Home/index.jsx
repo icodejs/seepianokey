@@ -3,8 +3,9 @@ import { bindActionCreators } from 'redux';
 import Home from './Home';
 import * as actions from '../../common/actions'
 
-const mapStateToProps = ({ selectedDeviceName }) => ({
+const mapStateToProps = ({ selectedDeviceName, webMidiSupported }) => ({
   selectedDeviceName,
+  webMidiSupported,
 });
 
 const mapDispatchToProps = (dispatch) =>

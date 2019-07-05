@@ -32,5 +32,21 @@ describe('actions', () => {
 
       expect(result).toEqual(expectedResult);
     })
-  })
+  });
+
+  describe("setWebmidiSupport", () => {
+    it("should set state relating to webmidi support", () => {
+      const webMidiSupported = 2;
+      const result = actions.setWebMidiSupported({
+        webMidiSupported
+      });
+
+      const expectedResult = {
+        type: types.SET_WEB_MIDI_SUPPORTED,
+        webMidiSupported
+      };
+
+      expect(result).toEqual(expectedResult);
+    });
+  });
 });

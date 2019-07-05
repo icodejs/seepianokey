@@ -30,7 +30,6 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      midiSupported: false,
       midiInputs: [],
       selectedInput: undefined,
       selectedOutput: undefined,
@@ -43,10 +42,8 @@ class Home extends Component {
 
   componentDidMount() {
     webmidi.enable(err => {
-      if (err) {
-        this.setState({ midiSupported: false });
-      } else {
-        this.setState({ midiSupported: true });
+      if (!err) {
+        this.props.setWebMidiSupported({ webMidiSupported: true });
       }
     });
   }
@@ -184,9 +181,13 @@ class Home extends Component {
   }
 
   render() {
-    const { notesPressed, midiSupported, selectedInput, selectedLesson } = this.state;
+    const {
+      notesPressed,
+      selectedInput,
+      selectedLesson
+    } = this.state;
 
-    if (!midiSupported) {
+    if (!this.props.webMidiSupported) {
       return <div className='error'>WebMidi is not supported</div>;
     }
 
@@ -245,7 +246,9 @@ class Home extends Component {
 
 Home.propTypes = {
   selectMidiController: PropTypes.func.isRequired,
+  setWebMidiSupported: PropTypes.func.isRequired,
+  webMidiSupported: PropTypes.bool.isRequired,
   selectedDeviceName: PropTypes.string,
-}
+};
 
 export default Home;
