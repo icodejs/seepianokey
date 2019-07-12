@@ -7,12 +7,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import webmidi from 'webmidi';
-import * as R from 'ramda'
+import * as R from 'ramda';
 
 // import { Chord } from "tonal";
-import { chord } from 'tonal-detect'
-import * as Note from 'tonal-note'
-import * as Scale from 'tonal-scale'
+import { chord } from 'tonal-detect';
+import * as Note from 'tonal-note';
+import * as Scale from 'tonal-scale';
 // import * as Key from "tonal-key";
 
 import Piano from '../../components/Piano';
@@ -50,7 +50,7 @@ class Home extends Component {
 
   handleReceivedMidiInputs = midiInputs => {
     this.setState({
-      midiInputs: [...this.state.midiInputs, ...midiInputs]
+      midiInputs: [...this.state.midiInputs, ...midiInputs],
     });
   };
 
@@ -65,28 +65,28 @@ class Home extends Component {
   handleLessonSelection = event => {
     this.setState({
       selectedLesson: event.target.value,
-    })
-  }
+    });
+  };
 
-  handleOnNoteOn = (note) => {
+  handleOnNoteOn = note => {
     console.log('Note on', note);
     this.setState({
       notesPressed: addNote(this.state.notesPressed)(note),
     });
-  }
+  };
 
-  handleOnNoteOff = (note) => {
+  handleOnNoteOff = note => {
     console.log('Note off', note);
     this.setState({
       notesPressed: removeNote(this.state.notesPressed)(note.id),
     });
-  }
+  };
 
-  handleChordKeySelected = (selectedChordKey) => {
+  handleChordKeySelected = selectedChordKey => {
     this.setState({
       selectedChordKey,
     });
-  }
+  };
 
   handleNoteClick(noteClicked) {
     console.log(noteClicked);
@@ -135,16 +135,19 @@ class Home extends Component {
       return;
     }
 
-    const noteNames = notesPressed.map(R.prop('name'))
+    const noteNames = notesPressed.map(R.prop('name'));
 
-    const results = Note.names(' #').map(n => {
-      return {
-        name: `${n} major`,
-        notes: Scale.notes(`${n} major`),
-      }
-    }).filter(s => {
-      return noteNames.every(n => s.notes.includes(n));
-    }).map(R.prop('name'));
+    const results = Note.names(' #')
+      .map(n => {
+        return {
+          name: `${n} major`,
+          notes: Scale.notes(`${n} major`),
+        };
+      })
+      .filter(s => {
+        return noteNames.every(n => s.notes.includes(n));
+      })
+      .map(R.prop('name'));
 
     if (!results.length) {
       return;
@@ -154,7 +157,6 @@ class Home extends Component {
   }
 
   renderLessonOptions() {
-
     const { midiInputs, selectedLesson } = this.state;
     const lessons = ['scales', 'chords'];
 
@@ -171,29 +173,23 @@ class Home extends Component {
           selectedLesson={selectedLesson}
           onLessonSelection={this.handleLessonSelection}
         />
-        {
-          selectedLesson === 'chords'
-            ? <NoteSelector onNoteSelected={this.handleChordKeySelected} />
-            : null
-        }
+        {selectedLesson === 'chords' ? (
+          <NoteSelector onNoteSelected={this.handleChordKeySelected} />
+        ) : null}
       </div>
-    )
+    );
   }
 
   render() {
-    const {
-      notesPressed,
-      selectedInput,
-      selectedLesson
-    } = this.state;
+    const { notesPressed, selectedInput, selectedLesson } = this.state;
 
     if (!this.props.webMidiSupported) {
-      return <div className='error'>WebMidi is not supported</div>;
+      return <div className="error">WebMidi is not supported</div>;
     }
 
     const displayRows = [
       this.renderPossibleChords(),
-      this.renderPossibleScale()
+      this.renderPossibleScale(),
     ];
 
     // This game will cycle through C chords and ask you to play them
@@ -220,17 +216,12 @@ class Home extends Component {
 
     // https://trello.com/c/Yu9jSm8X/5-midiaccess-web-apis-mdn#comment-5ce571a5284d1837556e7516
 
-
     return (
       <div className="Home">
         {this.renderLessonOptions()}
         <Display rows={displayRows} />
 
-        {
-          selectedLesson !== -1
-            ? <Scales notes={notesPressed} />
-            : null
-        }
+        {selectedLesson !== -1 ? <Scales notes={notesPressed} /> : null}
 
         <Piano
           onNoteOn={this.handleOnNoteOn}
