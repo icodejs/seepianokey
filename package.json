@@ -43,7 +43,6 @@
   },
   "lint-staged": {
     "*.{js,jsx}": [
-      "eslint --max-warnings 0",
       "jest --bail --findRelatedTests"
     ],
     "*.{js,jsx,json,css,md}": [

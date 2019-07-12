@@ -33,10 +33,10 @@ class DeviceSelection extends Component {
             onChange={this.handleDeviceSelection}
           >
             <option value="-1">Choose device</option>
-            {this.props.midiInputs.map(input => {
+            {this.props.midiInputs.map(({ id, manufacturer, name }) => {
               return (
-                <option key={input.id} value={input.name}>
-                  {`${input.manufacturer} ${input.name}`}
+                <option key={id} value={name}>
+                  {`${manufacturer} ${name}`}
                 </option>
               );
             })}
