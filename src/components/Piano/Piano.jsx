@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as Note from 'tonal-note'
+import * as Note from 'tonal-note';
 import { flatNotes, flatToSharp, octavesOptions } from '../../config';
 import { addNote, removeNote, containsNote } from '../../utils/notes';
 import './Piano.scss';
@@ -23,7 +23,7 @@ class Piano extends Component {
       timestamp: event.timestamp,
       target: event.target,
       channel: event.channel,
-      ...event.note
+      ...event.note,
     };
   }
 
@@ -61,11 +61,11 @@ class Piano extends Component {
   handleKeyboardKeysSelection = event => {
     const { value: numberOfKeyboardOctaves } = event.target;
     this.props.selectNumberOfKeyboardOctaves({
-      numberOfKeyboardOctaves: parseInt(numberOfKeyboardOctaves, 10)
-    })
+      numberOfKeyboardOctaves: parseInt(numberOfKeyboardOctaves, 10),
+    });
   };
 
-  handleNoteClicked = (note, pianoOctave) => (e) => {
+  handleNoteClicked = (note, pianoOctave) => e => {
     const { onNoteClick } = this.props;
     const id = note + pianoOctave;
     const event = {
@@ -82,7 +82,7 @@ class Piano extends Component {
 
     this.toggleNote(event);
     onNoteClick(event);
-  }
+  };
 
   toggleNote(note) {
     if (containsNote(this.state.notesPressed, note.id)) {
@@ -118,15 +118,14 @@ class Piano extends Component {
           </select>
         </label>
       </form>
-    )
+    );
   }
 
-  renderNote = (pianoOctave) => (k, noteIndex) => {
+  renderNote = pianoOctave => (k, noteIndex) => {
     const { notesPressed } = this.props;
     const note = flatNotes[noteIndex];
     const selected = notesPressed.find(({ name, octave }) => {
-      return flatToSharp(name) === flatToSharp(note) &&
-        octave === pianoOctave;
+      return flatToSharp(name) === flatToSharp(note) && octave === pianoOctave;
     });
     const noteId = `${note}_${pianoOctave}`;
 
@@ -137,12 +136,12 @@ class Piano extends Component {
         className={classNames(noteId, { selected })}
       />
     );
-  }
+  };
 
   renderPiano() {
     const { numberOfKeyboardOctaves } = this.props;
     const octavesOption = octavesOptions.find(
-      ({ octaves }) => octaves === numberOfKeyboardOctaves
+      ({ octaves }) => octaves === numberOfKeyboardOctaves,
     );
 
     return [...Array(numberOfKeyboardOctaves)].map((o, index) => {
@@ -150,10 +149,7 @@ class Piano extends Component {
       const pianoOctave = index + octavesOption.startingOctave;
 
       return (
-        <ul
-          key={`octave-${pianoOctave}`}
-          className={`octave-${pianoOctave}`}
-        >
+        <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
           {[...Array(keysPerOctave)].map(this.renderNote(pianoOctave))}
         </ul>
       );
@@ -164,9 +160,7 @@ class Piano extends Component {
     return (
       <Fragment>
         {this.renderKeyboardKeysSelector()}
-        <div className="piano">
-          {this.renderPiano()}
-        </div>
+        <div className="piano">{this.renderPiano()}</div>
       </Fragment>
     );
   }
@@ -175,9 +169,9 @@ class Piano extends Component {
 Piano.propTypes = {
   onNoteOn: PropTypes.func.isRequired,
   onNoteOff: PropTypes.func.isRequired,
-  onNoteClick: PropTypes.func.isRequired,
   numberOfKeyboardOctaves: PropTypes.number.isRequired,
   selectNumberOfKeyboardOctaves: PropTypes.func.isRequired,
+  onNoteClick: PropTypes.func,
   midiInputDevice: PropTypes.object,
   notesPressed: PropTypes.array,
 };
@@ -185,6 +179,7 @@ Piano.propTypes = {
 Piano.defaultProps = {
   notesPressed: [],
   numberOfKeyboardOctaves: 2,
+  onNoteClick: () => {},
 };
 
 export default Piano;
