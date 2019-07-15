@@ -3,8 +3,8 @@ import { bindActionCreators } from 'redux';
 import Lessons from './Lessons';
 import * as actions from '../../common/actions';
 
-const mapStateToProps = ({ selectedDeviceName, webMidiSupported }) => ({
-  selectedDeviceName,
+const mapStateToProps = ({ selectedDevice, webMidiSupported }) => ({
+  selectedDevice,
   webMidiSupported,
 });
 

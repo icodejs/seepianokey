@@ -5,7 +5,11 @@ import {
 } from './action-types';
 
 export const initialState = {
-  selectedDeviceName: 'APC Key 25',
+  selectedDevice: {
+    name: '',
+    input: null,
+    output: null,
+  },
   webMidiSupported: false,
 };
 
@@ -14,13 +18,13 @@ function seePianoKeyApp(state = initialState, action) {
     case SELECT_MIDI_CONTROLLER:
       return {
         ...state,
-        selectedDeviceName: action.selectedDeviceName
+        selectedDevice: action.selectedDevice,
       };
     case SELECT_NUMBER_OF_KEYBOARD_OCTAVES:
       return {
         ...state,
-        numberOfKeyboardOctaves: action.numberOfKeyboardOctaves
-      }
+        numberOfKeyboardOctaves: action.numberOfKeyboardOctaves,
+      };
     case SET_WEB_MIDI_SUPPORTED:
       return {
         ...state,

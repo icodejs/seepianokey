@@ -7,16 +7,20 @@ describe('reducer', () => {
   });
 
   it('should handle SELECT_MIDI_CONTROLLER', () => {
-    const fakeMidiController = 'fake-controller';
+    const fakeDevice = {
+      name: 'fake-midi-controller-name',
+      input: 'fake-midi-controller-input',
+      output: 'fake-midi-controller-output',
+    };
 
     expect(
       reducer(undefined, {
         type: types.SELECT_MIDI_CONTROLLER,
-        selectedDeviceName: fakeMidiController,
+        selectedDevice: fakeDevice,
       }),
     ).toEqual({
       ...initialState,
-      selectedDeviceName: fakeMidiController,
+      selectedDevice: fakeDevice,
     });
   });
 

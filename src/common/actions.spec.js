@@ -3,19 +3,19 @@ import * as types from './action-types';
 
 describe('actions', () => {
   describe('selectMidiController', () => {
-    it('should select a midi controller available', () => {
-      const selectedDeviceName = 'fake-controller';
+    it('should select a midi device', () => {
+      const selectedDevice = 'fake-device';
       const result = actions.selectMidiController({
-        selectedDeviceName,
+        selectedDevice,
       });
 
       const expectedResult = {
         type: types.SELECT_MIDI_CONTROLLER,
-        selectedDeviceName,
-      }
+        selectedDevice,
+      };
 
       expect(result).toEqual(expectedResult);
-    })
+    });
   });
 
   describe('selectNumberOfKeyboardOctaves', () => {
@@ -23,27 +23,27 @@ describe('actions', () => {
       const numberOfKeyboardOctaves = 2;
       const result = actions.selectNumberOfKeyboardOctaves({
         numberOfKeyboardOctaves,
-      })
+      });
 
       const expectedResult = {
         type: types.SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
         numberOfKeyboardOctaves,
-      }
+      };
 
       expect(result).toEqual(expectedResult);
-    })
+    });
   });
 
-  describe("setWebmidiSupport", () => {
-    it("should set state relating to webmidi support", () => {
+  describe('setWebmidiSupport', () => {
+    it('should set state relating to webmidi support', () => {
       const webMidiSupported = 2;
       const result = actions.setWebMidiSupported({
-        webMidiSupported
+        webMidiSupported,
       });
 
       const expectedResult = {
         type: types.SET_WEB_MIDI_SUPPORTED,
-        webMidiSupported
+        webMidiSupported,
       };
 
       expect(result).toEqual(expectedResult);

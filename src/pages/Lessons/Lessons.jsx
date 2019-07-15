@@ -31,8 +31,6 @@ class Lessons extends Component {
 
     this.state = {
       midiInputs: [],
-      selectedInput: undefined,
-      selectedOutput: undefined,
       notesPressed: [],
       displayText: '',
       selectedLesson: undefined,
@@ -44,22 +42,17 @@ class Lessons extends Component {
     webmidi.enable(err => {
       if (!err) {
         this.props.setWebMidiSupported({ webMidiSupported: true });
+
+        this.setState({
+          midiInputs: [...webmidi.inputs],
+        });
       }
     });
   }
 
-  handleReceivedMidiInputs = midiInputs => {
-    this.setState({
-      midiInputs: [...this.state.midiInputs, ...midiInputs],
-    });
-  };
-
-  handleDeviceSelection = ({ input, output, selectedDeviceName }) => {
-    this.props.selectMidiController({ selectedDeviceName });
-    this.setState({
-      selectedInput: input,
-      selectedOutput: output,
-    });
+  handleDeviceSelection = ({ selectedDevice }) => {
+    this.props.selectMidiController({ selectedDevice });
+    this.setState({ selectedDevice });
   };
 
   handleLessonSelection = event => {
@@ -164,9 +157,8 @@ class Lessons extends Component {
       <div className="lesson-options">
         <DeviceSelection
           midiInputs={midiInputs}
-          onReceivedMidiInputs={this.handleReceivedMidiInputs}
           onDeviceSelection={this.handleDeviceSelection}
-          selectedDeviceName={this.props.selectedDeviceName}
+          selectedDevice={this.props.selectedDevice}
         />
         <LessonSelector
           lessons={lessons}
@@ -181,7 +173,7 @@ class Lessons extends Component {
   }
 
   render() {
-    const { notesPressed, selectedInput, selectedLesson } = this.state;
+    const { notesPressed, selectedLesson } = this.state;
 
     if (!this.props.webMidiSupported) {
       return <div className="error">WebMidi is not supported</div>;
@@ -226,7 +218,7 @@ class Lessons extends Component {
         <Piano
           onNoteOn={this.handleOnNoteOn}
           onNoteOff={this.handleOnNoteOff}
-          midiInputDevice={selectedInput}
+          midiInputDevice={this.props.selectedDevice.input}
           notesPressed={notesPressed}
           onNoteClick={this.handleNoteClick}
         />
@@ -239,7 +231,11 @@ Lessons.propTypes = {
   selectMidiController: PropTypes.func.isRequired,
   setWebMidiSupported: PropTypes.func.isRequired,
   webMidiSupported: PropTypes.bool.isRequired,
-  selectedDeviceName: PropTypes.string,
+  selectedDevice: PropTypes.object,
+};
+
+Lessons.defaultProps = {
+  selectedDevice: {},
 };
 
 export default Lessons;

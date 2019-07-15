@@ -5,17 +5,12 @@ import webmidi from 'webmidi';
 import './DeviceSelection.scss';
 
 class DeviceSelection extends Component {
-  componentDidMount() {
-    this.props.onReceivedMidiInputs([...webmidi.inputs]);
-  }
-
   handleDeviceSelection = event => {
-    const { value: selectedDeviceName } = event.target;
-    const input = webmidi.getInputByName(selectedDeviceName);
-    const output = webmidi.getOutputByName(selectedDeviceName);
+    const { value: name } = event.target;
+    const input = webmidi.getInputByName(name);
+    const output = webmidi.getOutputByName(name);
 
-    this.props.onDeviceSelection({ input, output, selectedDeviceName });
-
+    this.props.onDeviceSelection({ selectedDevice: { input, output, name } });
     // changing the midi device should remove listener from the prev device
   };
 
@@ -30,7 +25,7 @@ class DeviceSelection extends Component {
       <form className="device-selection">
         <label>
           <select
-            value={this.props.selectedDeviceName}
+            value={this.props.selectedDevice.name}
             onChange={this.handleDeviceSelection}
           >
             <option value="-1">Choose device</option>
@@ -49,13 +44,14 @@ class DeviceSelection extends Component {
 }
 
 DeviceSelection.propTypes = {
-  onReceivedMidiInputs: PropTypes.func.isRequired,
   onDeviceSelection: PropTypes.func.isRequired,
+  selectedDevice: PropTypes.object,
   midiInputs: PropTypes.array,
 };
 
 DeviceSelection.defaultProps = {
   midiInputs: [],
+  selectedDevice: {},
 };
 
 export default DeviceSelection;
