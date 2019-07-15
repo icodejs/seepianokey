@@ -6,6 +6,32 @@ import { flatNotes, flatToSharp, octavesOptions } from '../../config';
 import { addNote, removeNote, containsNote } from '../../utils/notes';
 import './Piano.scss';
 
+const createPianoKeyEvent = (note, pianoOctave) => {
+  const id = note + pianoOctave;
+
+  return {
+    id,
+    midiNote: Note.midi(id),
+    timestamp: new Date().getTime(),
+    target: 'Mouse click',
+    rawVelocity: 127,
+    channel: 1,
+    octave: pianoOctave,
+    number: Note.midi(id),
+    name: note,
+  };
+};
+
+const parseNote = event => ({
+  id: event.note.name + event.note.octave,
+  midiNote: event.note.number,
+  rawVelocity: event.rawVelocity,
+  timestamp: event.timestamp,
+  target: event.target,
+  channel: event.channel,
+  ...event.note,
+});
+
 class Piano extends Component {
   constructor(props) {
     super(props);
@@ -15,25 +41,13 @@ class Piano extends Component {
     };
   }
 
-  parseNote(event) {
-    return {
-      id: event.note.name + event.note.octave,
-      midiNote: event.note.number,
-      rawVelocity: event.rawVelocity,
-      timestamp: event.timestamp,
-      target: event.target,
-      channel: event.channel,
-      ...event.note,
-    };
-  }
-
   onNoteOn = e => {
-    const note = this.parseNote(e);
+    const note = parseNote(e);
     this.props.onNoteOn(note);
   };
 
   onNoteOff = e => {
-    const note = this.parseNote(e);
+    const note = parseNote(e);
     this.props.onNoteOff(note);
   };
 
@@ -66,22 +80,10 @@ class Piano extends Component {
   };
 
   handleNoteClicked = (note, pianoOctave) => e => {
-    const { onNoteClick } = this.props;
-    const id = note + pianoOctave;
-    const event = {
-      id,
-      midiNote: Note.midi(id),
-      timestamp: new Date().getTime(),
-      target: 'Mouse click',
-      rawVelocity: 127,
-      channel: 1,
-      octave: pianoOctave,
-      number: Note.midi(id),
-      name: note,
-    };
-
+    e.preventDefault();
+    const event = createPianoKeyEvent(note, pianoOctave);
     this.toggleNote(event);
-    onNoteClick(event);
+    this.props.onNoteClick(event);
   };
 
   toggleNote(note) {
@@ -100,26 +102,24 @@ class Piano extends Component {
     }
   }
 
-  renderKeyboardKeysSelector() {
-    return (
-      <form className="octave-selector">
-        <label>
-          <select
-            value={this.props.numberOfKeyboardOctaves}
-            onChange={this.handleKeyboardKeysSelection}
-          >
-            {octavesOptions.map(({ keys, octaves }) => {
-              return (
-                <option key={octaves} value={octaves}>
-                  {`${keys}-key keyboard`}
-                </option>
-              );
-            })}
-          </select>
-        </label>
-      </form>
-    );
-  }
+  renderKeyboardKeysSelector = () => (
+    <form className="octave-selector">
+      <label>
+        <select
+          value={this.props.numberOfKeyboardOctaves}
+          onChange={this.handleKeyboardKeysSelection}
+        >
+          {octavesOptions.map(({ keys, octaves }) => {
+            return (
+              <option key={octaves} value={octaves}>
+                {`${keys}-key keyboard`}
+              </option>
+            );
+          })}
+        </select>
+      </label>
+    </form>
+  );
 
   renderNote = pianoOctave => (k, noteIndex) => {
     const { notesPressed } = this.props;

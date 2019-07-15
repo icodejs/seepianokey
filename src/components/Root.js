@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import Home from '../pages/Home';
-
-const Lessons = () => {
-  return (
-    <div>
-      <h2>Lessons</h2>
-    </div>
-  );
-};
+import Lessons from '../pages/Lessons';
 
 const Root = ({ store }) => (
   <Provider store={store}>
