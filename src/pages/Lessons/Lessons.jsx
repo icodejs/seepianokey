@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import webmidi from 'webmidi';
 import * as R from 'ramda';
 
-import { chord, reduced } from '@tonaljs/chord';
+import { chord } from '@tonaljs/chord';
 import { majorKey } from '@tonaljs/key';
 
 import Piano from '../../components/Piano';
@@ -74,27 +74,24 @@ class Lessons extends Component {
       return;
     }
 
-    const noteNames = notesPressed.map(R.prop('id'));
+    const noteNames = notesPressed.map(R.prop('name'));
 
-    const chordsInScale = lessonKey.chords.map(k => {
-      const [a, b, c] = chord(k).notes;
-      return {
-        name: k,
-        keys: [a, b, c],
-      };
+    const chordsInScale = lessonKey.chords.map(name => {
+      const [a, b, c] = chord(name).notes;
+      return [a, b, c];
     });
 
-    console.log('notesPressed', JSON.stringify(noteNames));
-    console.log(chordsInScale);
+    const chordMatch = chordsInScale.some(keys => {
+      return keys.every(key => {
+        return noteNames.includes(key);
+      });
+    });
 
-    // if (!results.length) {
-    //   return;
-    // }
+    if (!chordMatch) {
+      return;
+    }
 
-    // console.log(results);
-
-    return 'hi there';
-    // return `Possible Chords: ${results.join(' | ')}`;
+    return `Chord match: ${JSON.stringify(noteNames)}`;
   }
 
   render() {
