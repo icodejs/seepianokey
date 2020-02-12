@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as Note from 'tonal-note';
+import { toMidi } from '@tonaljs/midi';
 
 import { getDevice, setDeviceOctaves } from '../../client/localStorage';
 import { flatNotes, flatToSharp, octavesOptions } from '../../config';
@@ -13,13 +13,13 @@ const createPianoKeyEvent = (note, pianoOctave) => {
 
   return {
     id,
-    midiNote: Note.midi(id),
+    midiNote: toMidi(id),
     timestamp: new Date().getTime(),
     target: 'Mouse click',
     rawVelocity: 127,
     channel: 1,
     octave: pianoOctave,
-    number: Note.midi(id),
+    number: toMidi(id),
     name: note,
   };
 };
