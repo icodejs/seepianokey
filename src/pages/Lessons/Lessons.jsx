@@ -18,9 +18,6 @@ import * as Scale from 'tonal-scale';
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import DeviceSelection from '../../components/DeviceSelection';
-import NoteSelector from '../../components/NoteSelector';
-import LessonSelector from '../../components/LessonSelector';
-import Scales from '../../components/Lessons';
 import { addNote, removeNote } from '../../utils/notes';
 
 import './Lessons.scss';
@@ -150,8 +147,7 @@ class Lessons extends Component {
   }
 
   renderLessonOptions() {
-    const { midiInputs, selectedLesson } = this.state;
-    const lessons = ['scales', 'chords'];
+    const { midiInputs } = this.state;
 
     return (
       <div className="lesson-options">
@@ -160,20 +156,13 @@ class Lessons extends Component {
           onDeviceSelection={this.handleDeviceSelection}
           selectedDevice={this.props.selectedDevice}
         />
-        <LessonSelector
-          lessons={lessons}
-          selectedLesson={selectedLesson}
-          onLessonSelection={this.handleLessonSelection}
-        />
-        {selectedLesson === 'chords' ? (
-          <NoteSelector onNoteSelected={this.handleChordKeySelected} />
-        ) : null}
+        {/* <NoteSelector onNoteSelected={this.handleChordKeySelected} /> */}
       </div>
     );
   }
 
   render() {
-    const { notesPressed, selectedLesson } = this.state;
+    const { notesPressed } = this.state;
 
     if (!this.props.webMidiSupported) {
       return <div className="error">WebMidi is not supported</div>;
@@ -212,8 +201,6 @@ class Lessons extends Component {
       <div className="Lessons">
         {this.renderLessonOptions()}
         <Display rows={displayRows} />
-
-        {selectedLesson !== -1 ? <Scales notes={notesPressed} /> : null}
 
         <Piano
           onNoteOn={this.handleOnNoteOn}

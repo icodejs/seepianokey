@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as Note from 'tonal-note';
+
+import { getDevice, setDeviceOctaves } from '../../client/localStorage';
 import { flatNotes, flatToSharp, octavesOptions } from '../../config';
 import { addNote, removeNote, containsNote } from '../../utils/notes';
 import './Piano.scss';
@@ -60,6 +62,16 @@ class Piano extends Component {
         midiInputDevice.addListener('noteon', 'all', this.onNoteOn);
         midiInputDevice.addListener('noteoff', 'all', this.onNoteOff);
       });
+
+      const { octaves } = getDevice();
+
+      if (!octaves) {
+        return;
+      }
+
+      this.props.selectNumberOfKeyboardOctaves({
+        numberOfKeyboardOctaves: octaves,
+      });
     }
   }
 
@@ -74,8 +86,12 @@ class Piano extends Component {
 
   handleKeyboardKeysSelection = event => {
     const { value: numberOfKeyboardOctaves } = event.target;
+    const octaves = parseInt(numberOfKeyboardOctaves, 10);
+
+    setDeviceOctaves(octaves);
+
     this.props.selectNumberOfKeyboardOctaves({
-      numberOfKeyboardOctaves: parseInt(numberOfKeyboardOctaves, 10),
+      numberOfKeyboardOctaves: octaves,
     });
   };
 

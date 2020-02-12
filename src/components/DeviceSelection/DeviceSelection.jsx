@@ -2,15 +2,36 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import webmidi from 'webmidi';
 
+import { getDevice, setDeviceName } from '../../client/localStorage';
 import './DeviceSelection.scss';
 
+// const defaultDevice = 'Impact GX61 MIDI1'; // move to local storage
+
 class DeviceSelection extends Component {
-  handleDeviceSelection = event => {
-    const { value: name } = event.target;
+  componentDidMount() {
+    const { name } = getDevice();
+
+    if (!name) {
+      return;
+    }
+
+    const selectedDevice = this.getDeviceData(name);
+    this.props.onDeviceSelection({ selectedDevice });
+  }
+
+  getDeviceData(name) {
     const input = webmidi.getInputByName(name);
     const output = webmidi.getOutputByName(name);
+    return { name, input, output };
+  }
 
-    this.props.onDeviceSelection({ selectedDevice: { input, output, name } });
+  handleDeviceSelection = event => {
+    const { value: name } = event.target;
+    const selectedDevice = this.getDeviceData(name);
+
+    setDeviceName(name);
+
+    this.props.onDeviceSelection({ selectedDevice });
     // changing the midi device should remove listener from the prev device
   };
 
