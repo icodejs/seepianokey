@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import webmidi from 'webmidi';
 import * as R from 'ramda';
 
-import { chord } from '@tonaljs/chord';
+import { chord, transpose } from '@tonaljs/chord';
 import { majorKey } from '@tonaljs/key';
+import { entries } from '@tonaljs/chord-dictionary';
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
@@ -12,6 +13,45 @@ import DeviceSelection from '../../components/DeviceSelection';
 import { addNote, removeNote } from '../../utils/notes';
 
 import './Lessons.scss';
+
+const TONIC = 'C';
+const RELATIVE_KEY = 'major';
+const CHORD_LENGTH = 3;
+
+const debug = notesPressed => {
+  if (notesPressed.length === 0) {
+    return;
+  }
+  // console.log(notesPressed);
+
+  // const noteNames = notesPressed.map(R.prop('name'));
+  const [tonic] = notesPressed;
+
+  const key = majorKey(tonic);
+  console.log('key:', key.chords[6]);
+
+  const rawChords = key.chords.map(chord => {
+    if (chord.includes('m7b5')) {
+      return chord.replace('m7b5', 'o');
+    }
+    return chord.replace('maj7', '').replace('7', '');
+  });
+  console.log('rawChords', rawChords);
+
+  const chordsInScale = rawChords.map(name => {
+    const [a, b, c] = chord(name).notes;
+    return [a, b, c];
+  });
+  console.log('chordsInScale', chordsInScale);
+
+  // const majorChordIntervals = chord('C##m7b5').intervals;
+  // console.log('majorChordIntervals:', majorChordIntervals);
+
+  // const chordNotes = majorChordIntervals.map(i => {
+  //   return transpose('D#', i);
+  // });
+  // console.log('chordNotes:', chordNotes);
+};
 
 class Lessons extends Component {
   constructor(props) {
@@ -67,19 +107,36 @@ class Lessons extends Component {
   }
 
   renderPossibleChords() {
-    const lessonKey = majorKey('C');
     const { notesPressed } = this.state;
 
-    if (!notesPressed.length) {
+    const key = majorKey(TONIC);
+    const majorChordIntervals = chord(RELATIVE_KEY).intervals;
+
+    if (notesPressed.length === 0) {
       return;
     }
 
+    return debug(notesPressed);
+
     const noteNames = notesPressed.map(R.prop('name'));
 
-    const chordsInScale = lessonKey.chords.map(name => {
+    const chordsInScale = key.chords.map(name => {
       const [a, b, c] = chord(name).notes;
       return [a, b, c];
     });
+
+    const chordNotes = majorChordIntervals.map(i => {
+      return transpose(this.state.selectedChordKey, i);
+    });
+
+    const possibleChords = entries()
+      .filter(({ intervals }) => intervals.length === CHORD_LENGTH)
+      .map(chordType => chordType.name)
+      .filter(chordType => chordType);
+
+    console.log(majorChordIntervals);
+    console.log(chordNotes);
+    console.log(possibleChords);
 
     const chordMatch = chordsInScale.some(keys => {
       return keys.every(key => {
