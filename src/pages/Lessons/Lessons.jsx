@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import webmidi from 'webmidi';
 import * as R from 'ramda';
 
 import { chord, transpose } from '@tonaljs/chord';
 import { majorKey } from '@tonaljs/key';
-import { entries } from '@tonaljs/chord-dictionary';
+import { toRomanNumerals, fromRomanNumerals } from '@tonaljs/progression';
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
@@ -17,6 +17,8 @@ import './Lessons.scss';
 const TONIC = 'C';
 const RELATIVE_KEY = 'major';
 const CHORD_LENGTH = 3;
+
+let currentProgressionTest = [];
 
 const debug = notesPressed => {
   if (notesPressed.length === 0) {
@@ -31,19 +33,19 @@ const debug = notesPressed => {
   console.log('key:', key);
 
   // We are only interested in triads so remove references to seventh chords
-  const rawChords = key.chords.map(chord => {
-    if (chord.includes('m7b5')) {
-      return chord.replace('m7b5', 'o');
-    }
-    return chord.replace('maj7', '').replace('7', '');
-  });
-  console.log('rawChords', rawChords);
+  // const rawChords = key.chords.map(chord => {
+  //   if (chord.includes('m7b5')) {
+  //     return chord.replace('m7b5', 'o');
+  //   }
+  //   return chord.replace('maj7', '').replace('7', '');
+  // });
+  // console.log('rawChords', rawChords);
 
-  const chordsInScale = rawChords.map(name => {
-    const [a, b, c] = chord(name).notes;
-    return [a, b, c];
-  });
-  console.log('chordsInScale', chordsInScale);
+  // const chordsInScale = rawChords.map(name => {
+  //   const [a, b, c] = chord(name).notes;
+  //   return [a, b, c];
+  // });
+  // console.log('chordsInScale', chordsInScale);
 
   // const majorChordIntervals = chord('C##m7b5').intervals;
   // console.log('majorChordIntervals:', majorChordIntervals);
@@ -89,6 +91,33 @@ const findChordMatch = ({
       return noteNames.includes(key);
     });
   });
+};
+
+const progressionTest = ({
+  currentChord,
+  tonic = TONIC,
+  progressionLength = 3,
+  lesson = ['II', 'V', 'I'], // 2-5-1
+}) => {
+  currentProgressionTest.push(currentChord);
+
+  if (currentProgressionTest.length === progressionLength) {
+    console.log('currentProgressionTest', currentProgressionTest);
+
+    const attempt = currentProgressionTest.map(({ tonic }) => tonic);
+    const answer = fromRomanNumerals(tonic, lesson);
+    const attemptDetails = currentProgressionTest
+      .map(({ name }) => name)
+      .join(' => ');
+
+    currentProgressionTest = [];
+
+    return R.equals(attempt, answer)
+      ? `Correct answer = ${attemptDetails}`
+      : `Incorrect! Your answer = ${attemptDetails}. Correct answer = ${answer}`;
+  }
+
+  return `Chords left = ${3 - currentProgressionTest.length}`;
 };
 
 class Lessons extends Component {
@@ -154,7 +183,15 @@ class Lessons extends Component {
       return;
     }
 
-    return `Chord match: ${matchedChord.name} - ${matchedChord.notes}`;
+    // NOTE USE STATE TO HANDLE INSTRUCTION / PROGRESS
+    const testResults = progressionTest({ currentChord: matchedChord });
+
+    return (
+      <Fragment>
+        <p>{`Chord matched: ${matchedChord.name} - ${matchedChord.notes}`}</p>
+        <p>{testResults}</p>
+      </Fragment>
+    );
   }
 
   render() {
