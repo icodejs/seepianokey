@@ -28,8 +28,9 @@ const debug = notesPressed => {
   const [tonic] = notesPressed;
 
   const key = majorKey(tonic);
-  console.log('key:', key.chords[6]);
+  console.log('key:', key);
 
+  // We are only interested in triads so remove references to seventh chords
   const rawChords = key.chords.map(chord => {
     if (chord.includes('m7b5')) {
       return chord.replace('m7b5', 'o');
@@ -51,6 +52,44 @@ const debug = notesPressed => {
   //   return transpose('D#', i);
   // });
   // console.log('chordNotes:', chordNotes);
+};
+
+const getChordsInKey = ({ tonic, chordLength = CHORD_LENGTH }) => {
+  const key = majorKey(tonic);
+
+  // We are only interested in triads so remove references to seventh chords for now
+  return key.chords
+    .map(chord => {
+      const diminished7thChord = chord.includes('m7b5');
+      if (diminished7thChord) {
+        return chord.replace('m7b5', 'o');
+      }
+      return chord.replace('maj7', '').replace('7', '');
+    })
+    .map((name, index) => {
+      return {
+        name,
+        scaleDegree: index + 1,
+        chord: R.compose(R.take(chordLength), R.prop('notes'), chord)(name),
+      };
+    });
+};
+
+const findChordMatch = ({
+  chordsInKey,
+  noteNames,
+  chordLength = CHORD_LENGTH,
+}) => {
+  // Only interested in triad chords
+  if (noteNames.length !== chordLength) {
+    return;
+  }
+
+  return chordsInKey.find(({ chord }) => {
+    return chord.every(key => {
+      return noteNames.includes(key);
+    });
+  });
 };
 
 class Lessons extends Component {
@@ -108,47 +147,15 @@ class Lessons extends Component {
 
   renderPossibleChords() {
     const { notesPressed } = this.state;
-
-    const key = majorKey(TONIC);
-    const majorChordIntervals = chord(RELATIVE_KEY).intervals;
-
-    if (notesPressed.length === 0) {
-      return;
-    }
-
-    return debug(notesPressed);
-
     const noteNames = notesPressed.map(R.prop('name'));
+    const chordsInKey = getChordsInKey({ tonic: TONIC });
+    const matchedChord = findChordMatch({ chordsInKey, noteNames });
 
-    const chordsInScale = key.chords.map(name => {
-      const [a, b, c] = chord(name).notes;
-      return [a, b, c];
-    });
-
-    const chordNotes = majorChordIntervals.map(i => {
-      return transpose(this.state.selectedChordKey, i);
-    });
-
-    const possibleChords = entries()
-      .filter(({ intervals }) => intervals.length === CHORD_LENGTH)
-      .map(chordType => chordType.name)
-      .filter(chordType => chordType);
-
-    console.log(majorChordIntervals);
-    console.log(chordNotes);
-    console.log(possibleChords);
-
-    const chordMatch = chordsInScale.some(keys => {
-      return keys.every(key => {
-        return noteNames.includes(key);
-      });
-    });
-
-    if (!chordMatch) {
+    if (!matchedChord) {
       return;
     }
 
-    return `Chord match: ${JSON.stringify(noteNames)}`;
+    return `Chord match: ${JSON.stringify(matchedChord.name)}`;
   }
 
   render() {
