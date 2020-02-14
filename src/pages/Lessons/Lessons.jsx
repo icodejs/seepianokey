@@ -68,9 +68,8 @@ const getChordsInKey = ({ tonic, chordLength = CHORD_LENGTH }) => {
     })
     .map((name, index) => {
       return {
-        name,
         scaleDegree: index + 1,
-        chord: R.compose(R.take(chordLength), R.prop('notes'), chord)(name),
+        ...chord(name),
       };
     });
 };
@@ -85,8 +84,8 @@ const findChordMatch = ({
     return;
   }
 
-  return chordsInKey.find(({ chord }) => {
-    return chord.every(key => {
+  return chordsInKey.find(({ notes }) => {
+    return notes.every(key => {
       return noteNames.includes(key);
     });
   });
@@ -155,7 +154,7 @@ class Lessons extends Component {
       return;
     }
 
-    return `Chord match: ${JSON.stringify(matchedChord.name)}`;
+    return `Chord match: ${matchedChord.name} - ${matchedChord.notes}`;
   }
 
   render() {
