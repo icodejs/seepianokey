@@ -4,6 +4,20 @@
 2. With that name get the notes of all chords
 3. When keys are pressed check if key matches the chord we are interested in
 
+## Phase 2
+
+1. Find a list of common chord progressions
+2. Parse them into a way that tonal can read
+3. Create a list of chords required in each key
+4. Write code that can determine if a group of notes plays each of the chords in progression, successfully.
+
+## Useful videos
+
+- https://www.youtube.com/watch?v=vzujwexshe4
+- https://www.youtube.com/watch?v=K2TaB527JB4
+- https://www.youtube.com/watch?v=v9koZrHEDvI&t=2
+- https://www.youtube.com/watch?v=OE8jNy3NoPI
+
 ## Useful Links
 
 - https://www.8notes.com/resources/notefinders/piano_chords.asp
