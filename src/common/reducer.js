@@ -13,6 +13,13 @@ export const initialState = {
   },
   webMidiSupported: false,
   tonics: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+  chordProgressions: [
+    ['II', 'V', 'I'],
+    ['I', 'IV', 'V', 'V'],
+    ['I', 'I', 'IV', 'V'],
+    ['I', 'IV', 'I', 'V'],
+    ['I', 'IV', 'V', 'IV'],
+  ],
 };
 
 function seePianoKeyApp(state = initialState, action) {

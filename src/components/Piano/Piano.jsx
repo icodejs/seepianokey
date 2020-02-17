@@ -138,11 +138,13 @@ class Piano extends Component {
   );
 
   renderNote = pianoOctave => (k, noteIndex) => {
-    const { notesPressed } = this.props;
+    const { notesPressed, guideNotes } = this.props;
     const note = flatNotes[noteIndex];
     const selected = notesPressed.find(({ name, octave }) => {
       return flatToSharp(name) === flatToSharp(note) && octave === pianoOctave;
     });
+
+    // Also determine if a note is a guide note
     const noteId = `${note}_${pianoOctave}`;
 
     return (
@@ -155,6 +157,8 @@ class Piano extends Component {
   };
 
   renderPiano() {
+    console.log(this.props.guideNotes);
+
     const { numberOfKeyboardOctaves } = this.props;
     const octavesOption = octavesOptions.find(
       ({ octaves }) => octaves === numberOfKeyboardOctaves,
@@ -190,10 +194,12 @@ Piano.propTypes = {
   onNoteClick: PropTypes.func,
   midiInputDevice: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   notesPressed: PropTypes.array,
+  guideNotes: PropTypes.array,
 };
 
 Piano.defaultProps = {
   notesPressed: [],
+  guideNotes: [],
   numberOfKeyboardOctaves: 2,
   onNoteClick: () => {},
 };

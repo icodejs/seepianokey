@@ -20,6 +20,7 @@ class Lessons extends Component {
       notesPressed: [],
       displayText: '',
       selectedTonic: 'C',
+      selectedProgression: [],
     };
   }
 
@@ -45,6 +46,11 @@ class Lessons extends Component {
     this.setState({ selectedTonic });
   };
 
+  handleChordProgressionSelection = event => {
+    const { value: selectedProgression } = event.target;
+    this.setState({ selectedProgression });
+  };
+
   handleOnNoteOn = note => {
     // console.log('Note on', note);
     this.setState({
@@ -60,14 +66,18 @@ class Lessons extends Component {
   };
 
   handleNoteClick(noteClicked) {
-    console.log(noteClicked);
+    console.log('note mouse click', noteClicked);
   }
 
   renderPossibleChords() {
     const { notesPressed, selectedTonic } = this.state;
 
     // NOTE USE STATE TO HANDLE INSTRUCTION / PROGRESS
-    const testResults = progressionTest({ notesPressed, tonic: selectedTonic });
+    const testResults = progressionTest({
+      notesPressed,
+      tonic: selectedTonic,
+      lesson: this.props.chordProgressions[0],
+    });
 
     return (
       <Fragment>
@@ -98,6 +108,11 @@ class Lessons extends Component {
             onLessonSelection={this.handleTonicSelection}
             selectedTonic={this.state.selectedTonic}
           />
+          <LessonSelector
+            lessons={this.props.chordProgressions}
+            onLessonSelection={this.handleChordProgressionSelection}
+            selectedTonic={this.state.selectedProgression}
+          />
         </div>
 
         <Display rows={displayRows} />
@@ -107,6 +122,7 @@ class Lessons extends Component {
           onNoteOff={this.handleOnNoteOff}
           midiInputDevice={this.props.selectedDevice.input}
           notesPressed={notesPressed}
+          guideNotes={[]}
           onNoteClick={this.handleNoteClick}
         />
       </div>

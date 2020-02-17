@@ -3,15 +3,7 @@ import { chord } from '@tonaljs/chord';
 import { majorKey } from '@tonaljs/key';
 import { fromRomanNumerals } from '@tonaljs/progression';
 
-const TONICS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const TRIAD_CHORD_LENGTH = 3;
-const commonChordProgressions = [
-  ['II', 'V', 'I'],
-  [('I', 'IV', 'V', 'V')],
-  ['I', 'I', 'IV', 'V'],
-  ['I', 'IV', 'I', 'V'],
-  ['I', 'IV', 'V', 'IV'],
-];
 
 let currentProgressionTest = [];
 
@@ -88,20 +80,16 @@ const findChordMatch = ({
   });
 };
 
-const chordExistsForTonic = ({ noteNames }) => {
-  const chordsInKey = getChordsInKey({ tonic: TONICS[0] });
+const chordExistsForTonic = ({ noteNames, tonic }) => {
+  const chordsInKey = getChordsInKey({ tonic });
   // console.log('chordsInKey', chordsInKey);
 
   return findChordMatch({ chordsInKey, noteNames });
 };
 
-export const progressionTest = ({
-  notesPressed,
-  tonic = TONICS[0],
-  lesson = commonChordProgressions[0],
-}) => {
+export const progressionTest = ({ notesPressed, tonic, lesson }) => {
   const noteNames = notesPressed.map(R.prop('name'));
-  const matchedChord = chordExistsForTonic({ noteNames });
+  const matchedChord = chordExistsForTonic({ noteNames, tonic });
 
   if (!matchedChord) {
     return;

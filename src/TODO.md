@@ -11,6 +11,11 @@
 3. Create a list of chords required in each key
 4. Write code that can determine if a group of notes plays each of the chords in progression, successfully.
 
+## Phase 3
+
+1. Assist user by showing each chord on keyboard or keys in scale (Use toggle for each helper option)
+2. Selecting a tonic and progression should trigger an event that builds a lesson and stores it in state. This state should then be passed down and used by app, e.g. piano guide notes and progression test.
+
 ## Useful videos
 
 - https://www.youtube.com/watch?v=vzujwexshe4
