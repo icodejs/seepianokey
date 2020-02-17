@@ -188,7 +188,7 @@ Piano.propTypes = {
   numberOfKeyboardOctaves: PropTypes.number.isRequired,
   selectNumberOfKeyboardOctaves: PropTypes.func.isRequired,
   onNoteClick: PropTypes.func,
-  midiInputDevice: PropTypes.object,
+  midiInputDevice: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   notesPressed: PropTypes.array,
 };
 
