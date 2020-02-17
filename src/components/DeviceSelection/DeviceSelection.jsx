@@ -5,8 +5,6 @@ import webmidi from 'webmidi';
 import { getDevice, setDeviceName } from '../../client/localStorage';
 import './DeviceSelection.scss';
 
-// const defaultDevice = 'Impact GX61 MIDI1'; // move to local storage
-
 class DeviceSelection extends Component {
   componentDidMount() {
     const { name } = getDevice();

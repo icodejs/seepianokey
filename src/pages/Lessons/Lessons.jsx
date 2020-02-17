@@ -5,6 +5,7 @@ import webmidi from 'webmidi';
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import DeviceSelection from '../../components/DeviceSelection';
+import LessonSelector from '../../components/LessonSelector';
 import { addNote, removeNote } from '../../utils/notes';
 import { progressionTest } from '../../lessons/chords';
 
@@ -18,7 +19,7 @@ class Lessons extends Component {
       midiInputs: [],
       notesPressed: [],
       displayText: '',
-      selectedChordKey: 'C',
+      selectedTonic: 'C',
     };
   }
 
@@ -39,6 +40,11 @@ class Lessons extends Component {
     this.setState({ selectedDevice });
   };
 
+  handleTonicSelection = event => {
+    const { value: selectedTonic } = event.target;
+    this.setState({ selectedTonic });
+  };
+
   handleOnNoteOn = note => {
     // console.log('Note on', note);
     this.setState({
@@ -53,21 +59,15 @@ class Lessons extends Component {
     });
   };
 
-  handleChordKeySelected = selectedChordKey => {
-    this.setState({
-      selectedChordKey,
-    });
-  };
-
   handleNoteClick(noteClicked) {
     console.log(noteClicked);
   }
 
   renderPossibleChords() {
-    const { notesPressed } = this.state;
+    const { notesPressed, selectedTonic } = this.state;
 
     // NOTE USE STATE TO HANDLE INSTRUCTION / PROGRESS
-    const testResults = progressionTest({ notesPressed, tonic: 'D' });
+    const testResults = progressionTest({ notesPressed, tonic: selectedTonic });
 
     return (
       <Fragment>
@@ -92,6 +92,11 @@ class Lessons extends Component {
             midiInputs={midiInputs}
             onDeviceSelection={this.handleDeviceSelection}
             selectedDevice={this.props.selectedDevice}
+          />
+          <LessonSelector
+            lessons={this.props.tonics}
+            onLessonSelection={this.handleTonicSelection}
+            selectedTonic={this.state.selectedTonic}
           />
         </div>
 

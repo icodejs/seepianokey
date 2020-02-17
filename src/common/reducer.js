@@ -2,6 +2,7 @@ import {
   SELECT_MIDI_CONTROLLER,
   SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
   SET_WEB_MIDI_SUPPORTED,
+  SELECTED_TONIC,
 } from './action-types';
 
 export const initialState = {
@@ -11,6 +12,7 @@ export const initialState = {
     output: null,
   },
   webMidiSupported: false,
+  tonics: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
 };
 
 function seePianoKeyApp(state = initialState, action) {
@@ -29,6 +31,11 @@ function seePianoKeyApp(state = initialState, action) {
       return {
         ...state,
         webMidiSupported: action.webMidiSupported,
+      };
+    case SELECTED_TONIC:
+      return {
+        ...state,
+        tonic: action.tonic,
       };
     default:
       return state;
