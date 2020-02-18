@@ -19,7 +19,6 @@ class Lessons extends Component {
       midiInputs: [],
       notesPressed: [],
       displayText: '',
-      selectedTonic: 'C',
       selectedProgression: [],
     };
   }
@@ -38,12 +37,11 @@ class Lessons extends Component {
 
   handleDeviceSelection = ({ selectedDevice }) => {
     this.props.selectMidiController({ selectedDevice });
-    this.setState({ selectedDevice });
   };
 
   handleTonicSelection = event => {
-    const { value: selectedTonic } = event.target;
-    this.setState({ selectedTonic });
+    const { value: tonic } = event.target;
+    this.props.selectTonic({ tonic });
   };
 
   handleChordProgressionSelection = event => {
@@ -69,14 +67,16 @@ class Lessons extends Component {
     console.log('note mouse click', noteClicked);
   }
 
-  renderPossibleChords() {
-    const { notesPressed, selectedTonic } = this.state;
+  renderChordTestInformation() {
+    const { notesPressed } = this.state;
+    const { tonic, chords, chordProgressions } = this.props;
 
     // NOTE USE STATE TO HANDLE INSTRUCTION / PROGRESS
     const testResults = progressionTest({
       notesPressed,
-      tonic: selectedTonic,
-      lesson: this.props.chordProgressions[0],
+      tonic,
+      lesson: chordProgressions[0],
+      chordsInKey: chords[tonic],
     });
 
     return (
@@ -87,13 +87,20 @@ class Lessons extends Component {
   }
 
   render() {
-    const { notesPressed, midiInputs } = this.state;
+    const {
+      tonic,
+      tonics,
+      selectedDevice,
+      chordProgressions,
+      webMidiSupported,
+    } = this.props;
+    const { notesPressed, midiInputs, selectedProgression } = this.state;
 
-    if (!this.props.webMidiSupported) {
+    if (!webMidiSupported) {
       return <div className="error">WebMidi is not supported</div>;
     }
 
-    const displayRows = [this.renderPossibleChords()];
+    const displayRows = [this.renderChordTestInformation()];
 
     return (
       <div className="Lessons">
@@ -101,17 +108,17 @@ class Lessons extends Component {
           <DeviceSelection
             midiInputs={midiInputs}
             onDeviceSelection={this.handleDeviceSelection}
-            selectedDevice={this.props.selectedDevice}
+            selectedDevice={selectedDevice}
           />
           <LessonSelector
-            lessons={this.props.tonics}
+            lessons={tonics}
             onLessonSelection={this.handleTonicSelection}
-            selectedTonic={this.state.selectedTonic}
+            selectedValue={tonic}
           />
           <LessonSelector
-            lessons={this.props.chordProgressions}
+            lessons={chordProgressions}
             onLessonSelection={this.handleChordProgressionSelection}
-            selectedTonic={this.state.selectedProgression}
+            selectedValue={JSON.stringify(selectedProgression)}
           />
         </div>
 
@@ -120,7 +127,7 @@ class Lessons extends Component {
         <Piano
           onNoteOn={this.handleOnNoteOn}
           onNoteOff={this.handleOnNoteOff}
-          midiInputDevice={this.props.selectedDevice.input}
+          midiInputDevice={selectedDevice.input}
           notesPressed={notesPressed}
           guideNotes={[]}
           onNoteClick={this.handleNoteClick}

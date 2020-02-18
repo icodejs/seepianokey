@@ -1,50 +1,14 @@
 import * as R from 'ramda';
 import { chord } from '@tonaljs/chord';
-import { majorKey } from '@tonaljs/key';
+import { majorKey, minorKey } from '@tonaljs/key';
 import { fromRomanNumerals } from '@tonaljs/progression';
 
 const TRIAD_CHORD_LENGTH = 3;
 
 let currentProgressionTest = [];
 
-const debug = notesPressed => {
-  if (notesPressed.length === 0) {
-    return;
-  }
-  // console.log(notesPressed);
-
-  // const noteNames = notesPressed.map(R.prop('name'));
-  const [tonic] = notesPressed;
-
-  const key = majorKey(tonic);
-  console.log('key:', key);
-
-  // We are only interested in triads so remove references to seventh chords
-  // const rawChords = key.chords.map(chord => {
-  //   if (chord.includes('m7b5')) {
-  //     return chord.replace('m7b5', 'o');
-  //   }
-  //   return chord.replace('maj7', '').replace('7', '');
-  // });
-  // console.log('rawChords', rawChords);
-
-  // const chordsInScale = rawChords.map(name => {
-  //   const [a, b, c] = chord(name).notes;
-  //   return [a, b, c];
-  // });
-  // console.log('chordsInScale', chordsInScale);
-
-  // const majorChordIntervals = chord('C##m7b5').intervals;
-  // console.log('majorChordIntervals:', majorChordIntervals);
-
-  // const chordNotes = majorChordIntervals.map(i => {
-  //   return transpose('D#', i);
-  // });
-  // console.log('chordNotes:', chordNotes);
-};
-
-const getChordsInKey = ({ tonic }) => {
-  const key = majorKey(tonic);
+export const getChordsInKey = ({ tonic, scale = 'major' }) => {
+  const key = scale === 'major' ? majorKey(tonic) : minorKey(tonic);
 
   // We are only interested in triads so remove references to seventh chords for now
   return key.chords
@@ -66,9 +30,8 @@ const getChordsInKey = ({ tonic }) => {
 const findChordMatch = ({
   chordsInKey,
   noteNames,
-  numberOfNotesInChord = TRIAD_CHORD_LENGTH,
+  numberOfNotesInChord = TRIAD_CHORD_LENGTH, // Only interested in triad chords for now
 }) => {
-  // Only interested in triad chords
   if (noteNames.length !== numberOfNotesInChord) {
     return;
   }
@@ -80,16 +43,17 @@ const findChordMatch = ({
   });
 };
 
-const chordExistsForTonic = ({ noteNames, tonic }) => {
-  const chordsInKey = getChordsInKey({ tonic });
-  // console.log('chordsInKey', chordsInKey);
-
-  return findChordMatch({ chordsInKey, noteNames });
-};
-
-export const progressionTest = ({ notesPressed, tonic, lesson }) => {
+export const progressionTest = ({
+  notesPressed,
+  tonic,
+  lesson,
+  chordsInKey,
+}) => {
   const noteNames = notesPressed.map(R.prop('name'));
-  const matchedChord = chordExistsForTonic({ noteNames, tonic });
+  const matchedChord = findChordMatch({
+    noteNames,
+    chordsInKey,
+  });
 
   if (!matchedChord) {
     return;

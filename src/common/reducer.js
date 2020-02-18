@@ -2,8 +2,12 @@ import {
   SELECT_MIDI_CONTROLLER,
   SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
   SET_WEB_MIDI_SUPPORTED,
-  SELECTED_TONIC,
+  SELECT_TONIC,
 } from './action-types';
+
+import { getChordsInKey } from '../lessons/chords';
+
+const tonics = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
 export const initialState = {
   selectedDevice: {
@@ -12,7 +16,12 @@ export const initialState = {
     output: null,
   },
   webMidiSupported: false,
-  tonics: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+  tonic: 'C',
+  tonics,
+  chords: tonics.reduce((acc, tonic) => {
+    acc[tonic] = getChordsInKey({ tonic });
+    return acc;
+  }, {}),
   chordProgressions: [
     ['II', 'V', 'I'],
     ['I', 'IV', 'V', 'V'],
@@ -39,7 +48,7 @@ function seePianoKeyApp(state = initialState, action) {
         ...state,
         webMidiSupported: action.webMidiSupported,
       };
-    case SELECTED_TONIC:
+    case SELECT_TONIC:
       return {
         ...state,
         tonic: action.tonic,

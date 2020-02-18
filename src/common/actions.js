@@ -2,6 +2,7 @@ import {
   SELECT_MIDI_CONTROLLER,
   SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
   SET_WEB_MIDI_SUPPORTED,
+  SELECT_TONIC,
 } from './action-types';
 
 export const selectMidiController = ({ selectedDevice }) => ({
@@ -19,4 +20,9 @@ export const setWebMidiSupported = ({ webMidiSupported }) => ({
   webMidiSupported,
 });
 
-export const setAvailableDevices = ({ devices }) => {};
+export const selectTonic = ({ tonic }) => {
+  return {
+    type: SELECT_TONIC,
+    tonic,
+  };
+};

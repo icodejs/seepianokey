@@ -7,11 +7,15 @@ const mapStateToProps = ({
   selectedDevice,
   webMidiSupported,
   tonics,
+  tonic,
+  chords,
   chordProgressions,
 }) => ({
   selectedDevice,
   webMidiSupported,
   tonics,
+  tonic,
+  chords,
   chordProgressions,
 });
 

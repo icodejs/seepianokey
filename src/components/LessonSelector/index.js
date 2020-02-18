@@ -2,13 +2,10 @@ import React from 'react';
 
 import './LessonSelector.scss';
 
-export default ({ lessons, selectedLesson, onLessonSelection }) => (
+export default ({ lessons, selectedValue, onLessonSelection }) => (
   <form className="lesson-selector">
     <label>
-      <select
-        value={selectedLesson}
-        onChange={onLessonSelection}
-      >
+      <select value={selectedValue} onChange={onLessonSelection}>
         <option value="-1">Choose lesson</option>
         {lessons.map(lesson => {
           return (

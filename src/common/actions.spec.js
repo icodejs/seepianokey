@@ -49,4 +49,20 @@ describe('actions', () => {
       expect(result).toEqual(expectedResult);
     });
   });
+
+  describe('selectTonic', () => {
+    it('should set selected tonic and retrieve tonic related data from tonal', () => {
+      const tonic = 'C';
+      const result = actions.selectTonic({
+        tonic,
+      });
+
+      const expectedResult = {
+        type: types.SELECT_TONIC,
+        tonic,
+      };
+
+      expect(result).toEqual(expectedResult);
+    });
+  });
 });

@@ -157,7 +157,7 @@ class Piano extends Component {
   };
 
   renderPiano() {
-    console.log(this.props.guideNotes);
+    // console.log(this.props.guideNotes);
 
     const { numberOfKeyboardOctaves } = this.props;
     const octavesOption = octavesOptions.find(
