@@ -18,6 +18,7 @@
 3. Put notes on keys
 4. Buttons to choose chord progression
 5. Help instructions
+6. Make sure correct octave is pressed and extract octave from notes pressed and noted needed for comparison.
 
 ## Useful videos
 

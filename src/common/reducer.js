@@ -5,9 +5,11 @@ import {
   SELECT_TONIC,
 } from './action-types';
 
-import { getChordsInKey } from '../lessons/chords';
+import { getChordsInKey, getScaleForKey } from '../lessons/chords';
 
-const tonics = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const tonics = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // add accidentals
+const octave = 4;
+const scaleType = 'major';
 
 export const initialState = {
   selectedDevice: {
@@ -19,7 +21,19 @@ export const initialState = {
   tonic: 'C',
   tonics,
   chords: tonics.reduce((acc, tonic) => {
-    acc[tonic] = getChordsInKey({ tonic });
+    acc[tonic] = getChordsInKey({
+      tonic,
+      octave,
+      scaleType,
+    });
+    return acc;
+  }, {}),
+  scales: tonics.reduce((acc, tonic) => {
+    acc[tonic] = getScaleForKey({
+      tonic,
+      octave,
+      scaleType,
+    });
     return acc;
   }, {}),
   chordProgressions: [

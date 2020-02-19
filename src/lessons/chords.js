@@ -2,13 +2,15 @@ import * as R from 'ramda';
 import { chord } from '@tonaljs/chord';
 import { majorKey, minorKey } from '@tonaljs/key';
 import { fromRomanNumerals } from '@tonaljs/progression';
+import { scale } from '@tonaljs/scale';
 
 const TRIAD_CHORD_LENGTH = 3;
 
 let currentProgressionTest = [];
 
-export const getChordsInKey = ({ tonic, scale = 'major' }) => {
-  const key = scale === 'major' ? majorKey(tonic) : minorKey(tonic);
+export const getChordsInKey = ({ tonic, scaleType = 'major', octave = 4 }) => {
+  const key =
+    scaleType === 'major' ? majorKey(`${tonic}${octave}`) : minorKey(tonic);
 
   // We are only interested in triads so remove references to seventh chords for now
   return key.chords
@@ -25,6 +27,12 @@ export const getChordsInKey = ({ tonic, scale = 'major' }) => {
         ...chord(name),
       };
     });
+};
+
+export const getScaleForKey = ({ tonic, scaleType = 'major', octave = 4 }) => {
+  return {
+    scale: scale(`${tonic}${octave} ${scaleType}`),
+  };
 };
 
 const findChordMatch = ({
