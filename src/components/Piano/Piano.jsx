@@ -8,6 +8,8 @@ import { flatNotes, flatToSharp, octavesOptions } from '../../config';
 import { addNote, removeNote, containsNote } from '../../utils/notes';
 import './Piano.scss';
 
+const KEYS_PER_OCTAVE = 12;
+
 const createPianoKeyEvent = (note, pianoOctave) => {
   const id = note + pianoOctave;
 
@@ -138,39 +140,42 @@ class Piano extends Component {
   );
 
   renderNote = pianoOctave => (k, noteIndex) => {
-    const { notesPressed, guideNotes } = this.props;
+    const { notesPressed, scaleGuideNotes } = this.props;
     const note = flatNotes[noteIndex];
     const selected = notesPressed.find(({ name, octave }) => {
       return flatToSharp(name) === flatToSharp(note) && octave === pianoOctave;
     });
 
-    // Also determine if a note is a guide note
+    const scaleGuideNote = scaleGuideNotes.find((n, scaleKeyIndex) => {
+      return flatToSharp(n) === flatToSharp(note);
+    });
+
     const noteId = `${note}_${pianoOctave}`;
 
     return (
       <li
         key={noteId}
         onClick={this.handleNoteClicked(note, pianoOctave)}
-        className={classNames(noteId, { selected })}
+        className={classNames(noteId, {
+          selected,
+          'scale-guide-note': scaleGuideNote,
+        })}
       />
     );
   };
 
   renderPiano() {
-    // console.log(this.props.guideNotes);
-
     const { numberOfKeyboardOctaves } = this.props;
     const octavesOption = octavesOptions.find(
       ({ octaves }) => octaves === numberOfKeyboardOctaves,
     );
 
     return [...Array(numberOfKeyboardOctaves)].map((o, index) => {
-      const keysPerOctave = 12;
       const pianoOctave = index + octavesOption.startingOctave;
 
       return (
         <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
-          {[...Array(keysPerOctave)].map(this.renderNote(pianoOctave))}
+          {[...Array(KEYS_PER_OCTAVE)].map(this.renderNote(pianoOctave))}
         </ul>
       );
     });
@@ -193,13 +198,13 @@ Piano.propTypes = {
   selectNumberOfKeyboardOctaves: PropTypes.func.isRequired,
   onNoteClick: PropTypes.func,
   midiInputDevice: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
-  notesPressed: PropTypes.array,
-  guideNotes: PropTypes.array,
+  notesPressed: PropTypes.arrayOf(PropTypes.object),
+  scaleGuideNotes: PropTypes.array,
 };
 
 Piano.defaultProps = {
   notesPressed: [],
-  guideNotes: [],
+  scaleGuideNotes: [],
   numberOfKeyboardOctaves: 2,
   onNoteClick: () => {},
 };

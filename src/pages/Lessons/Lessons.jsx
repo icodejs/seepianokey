@@ -20,6 +20,7 @@ class Lessons extends Component {
       notesPressed: [],
       displayText: '',
       selectedProgression: [],
+      showGuideNotes: true,
     };
   }
 
@@ -90,17 +91,24 @@ class Lessons extends Component {
     const {
       tonic,
       tonics,
+      chords,
       selectedDevice,
       chordProgressions,
       webMidiSupported,
     } = this.props;
-    const { notesPressed, midiInputs, selectedProgression } = this.state;
+    const {
+      notesPressed,
+      midiInputs,
+      selectedProgression,
+      showGuideNotes,
+    } = this.state;
 
     if (!webMidiSupported) {
       return <div className="error">WebMidi is not supported</div>;
     }
 
     const displayRows = [this.renderChordTestInformation()];
+    const scaleNotes = chords[tonic].map(chord => chord.tonic);
 
     return (
       <div className="Lessons">
@@ -129,7 +137,7 @@ class Lessons extends Component {
           onNoteOff={this.handleOnNoteOff}
           midiInputDevice={selectedDevice.input}
           notesPressed={notesPressed}
-          guideNotes={[]}
+          scaleGuideNotes={showGuideNotes ? scaleNotes : []}
           onNoteClick={this.handleNoteClick}
         />
       </div>

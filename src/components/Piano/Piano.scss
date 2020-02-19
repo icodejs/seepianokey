@@ -7,7 +7,8 @@ $bg: #282c34;
   position: relative;
   height: 70%;
   flex-grow: 1;
-  box-shadow: 0px 2px 1px 1px rgba(0, 0, 0, 0.2), 0px -4px 1px 4px rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 0px 2px 1px 1px rgba(0, 0, 0, 0.2),
+    0px -4px 1px 4px rgba(0, 0, 0, 0.5) inset;
   &:active {
     background: #282c34;
     box-shadow: 0px -4px 1px 4px rgba(0, 0, 0, 0.5) inset;
@@ -58,6 +59,9 @@ $bg: #282c34;
     box-shadow: 0px -2px 1px 1px rgba(0, 0, 0, 0.2) inset;
     &:active {
       background: #eee;
+    }
+    &.scale-guide-note {
+      background: yellow;
     }
     &.selected {
       background: #61dafb;

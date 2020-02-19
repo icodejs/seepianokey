@@ -1,6 +1,5 @@
 import { config } from 'dotenv';
 import envalid from 'envalid';
-// import { Scale, scale, transpose } from 'tonal';
 
 config();
 
@@ -10,40 +9,35 @@ export const env = envalid.cleanEnv(process.env, {
   DEFAULT_CONTROLLER: str({ default: 'APC' }),
 });
 
-export const octavesOptions = [{
-  keys: 25,
-  octaves: 2,
-  startingOctave: 3,
-}, {
-  keys: 49,
-  octaves: 4,
-  startingOctave: 2,
-}, {
-  keys: 61,
-  octaves: 5,
-  startingOctave: 2,
-}, {
-  keys: 76,
-  octaves: 6,
-  startingOctave: 1,
-}, {
-  keys: 88,
-  octaves: 7,
-  startingOctave: 1,
-}];
+export const octavesOptions = [
+  {
+    keys: 25,
+    octaves: 2,
+    startingOctave: 3,
+  },
+  {
+    keys: 49,
+    octaves: 4,
+    startingOctave: 2,
+  },
+  {
+    keys: 61,
+    octaves: 5,
+    startingOctave: 2,
+  },
+  {
+    keys: 76,
+    octaves: 6,
+    startingOctave: 1,
+  },
+  {
+    keys: 88,
+    octaves: 7,
+    startingOctave: 1,
+  },
+];
 
-export const flatToSharp = (note) => {
-  const notes = {
-    'Db': 'C#',
-    'Eb': 'D#',
-    'Gb': 'F#',
-    'Ab': 'G#',
-    'Bb': 'A#',
-  };
-  return notes[note] || note;
-};
-
-export const notes = [
+export const allNotes = [
   'C',
   'C#',
   'Db',
@@ -60,22 +54,46 @@ export const notes = [
   'A',
   'A#',
   'Bb',
-  'B'
+  'B',
 ];
 
-export const flatNotes = notes.filter((n) =>
-  n.indexOf('#') === -1);
+export const notes = [
+  'C',
+  'Db',
+  'D',
+  'Eb',
+  'E',
+  'F',
+  'Gb',
+  'G',
+  'Ab',
+  'A',
+  'Bb',
+  'B',
+];
 
-export const sharpNotes = notes.filter((n) =>
-  n.indexOf('b') === -1);
+export const flatNotes = allNotes.filter(n => n.indexOf('#') === -1);
 
-export const sharpToFlat = (note) => {
+export const sharpNotes = allNotes.filter(n => n.indexOf('b') === -1);
+
+export const sharpToFlat = note => {
   const notes = {
     'C#': 'Db',
     'D#': 'Eb',
     'F#': 'Gb',
     'G#': 'Ab',
     'A#': 'Bb',
+  };
+  return notes[note] || note;
+};
+
+export const flatToSharp = note => {
+  const notes = {
+    Db: 'C#',
+    Eb: 'D#',
+    Gb: 'F#',
+    Ab: 'G#',
+    Bb: 'A#',
   };
   return notes[note] || note;
 };
@@ -109,4 +127,3 @@ export const sharpToFlat = (note) => {
 
 // console.log(Scale.names());
 // console.log(modules);
-
