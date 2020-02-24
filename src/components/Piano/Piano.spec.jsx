@@ -10,6 +10,21 @@ describe('Piano', () => {
         onNoteOn: () => {},
         onNoteOff: () => {},
         selectNumberOfKeyboardOctaves: () => {},
+        handleDeviceSelection: () => {},
+        midiInputs: [
+          {
+            id: 'fake-id1',
+            manufacturer: 'fake-manufacturer',
+            name: 'fake-name',
+            type: 'fake-type',
+          },
+          {
+            id: 'fake-id2',
+            manufacturer: 'fake-manufacturer',
+            name: 'fake-name',
+            type: 'fake-type',
+          },
+        ],
       };
       const json = renderer.create(<Piano {...props} />).toJSON();
       expect(json).toMatchSnapshot();

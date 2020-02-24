@@ -102,4 +102,8 @@ $bg: #282c34;
       @extend .next-is-black;
     }
   }
+
+  .octave-selector {
+    display: inline-block;
+  }
 }

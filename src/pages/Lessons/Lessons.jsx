@@ -4,7 +4,6 @@ import webmidi from 'webmidi';
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
-import DeviceSelection from '../../components/DeviceSelection';
 import LessonSelector from '../../components/LessonSelector';
 import { addNote, removeNote } from '../../utils/notes';
 import { progressionTest } from '../../lessons/chords';
@@ -113,11 +112,6 @@ class Lessons extends Component {
     return (
       <div className="Lessons">
         <div className="lesson-options">
-          <DeviceSelection
-            midiInputs={midiInputs}
-            onDeviceSelection={this.handleDeviceSelection}
-            selectedDevice={selectedDevice}
-          />
           <LessonSelector
             lessons={tonics}
             onLessonSelection={this.handleTonicSelection}
@@ -139,6 +133,9 @@ class Lessons extends Component {
           notesPressed={notesPressed}
           scaleGuideNotes={showGuideNotes ? scaleNotes : []}
           onNoteClick={this.handleNoteClick}
+          midiInputs={midiInputs}
+          handleDeviceSelection={this.handleDeviceSelection}
+          selectedDevice={selectedDevice}
         />
       </div>
     );

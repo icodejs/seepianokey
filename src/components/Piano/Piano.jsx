@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { toMidi } from '@tonaljs/midi';
 
+import DeviceSelection from '../../components/DeviceSelection';
+
 import { getDevice, setDeviceOctaves } from '../../client/localStorage';
 import { flatNotes, flatToSharp, octavesOptions } from '../../config';
 import { addNote, removeNote, containsNote } from '../../utils/notes';
@@ -139,6 +141,19 @@ class Piano extends Component {
     </form>
   );
 
+  renderDeviceSelector = () => {
+    const { midiInputs, handleDeviceSelection, selectedDevice } = this.props;
+    return (
+      <DeviceSelection
+        {...{
+          midiInputs,
+          selectedDevice,
+          onDeviceSelection: handleDeviceSelection,
+        }}
+      />
+    );
+  };
+
   renderNote = pianoOctave => (k, noteIndex) => {
     const { notesPressed, scaleGuideNotes } = this.props;
     const note = flatNotes[noteIndex];
@@ -184,6 +199,7 @@ class Piano extends Component {
   render() {
     return (
       <Fragment>
+        {this.renderDeviceSelector()}
         {this.renderKeyboardKeysSelector()}
         <div className="piano">{this.renderPiano()}</div>
       </Fragment>

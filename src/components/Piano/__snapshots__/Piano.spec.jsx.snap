@@ -3,6 +3,31 @@
 exports[`Piano render should render component 1`] = `
 Array [
   <form
+    className="device-selection"
+  >
+    <label>
+      <select
+        onChange={[Function]}
+      >
+        <option
+          value="-1"
+        >
+          Choose device
+        </option>
+        <option
+          value="fake-name"
+        >
+          fake-manufacturer fake-name
+        </option>
+        <option
+          value="fake-name"
+        >
+          fake-manufacturer fake-name
+        </option>
+      </select>
+    </label>
+  </form>,
+  <form
     className="octave-selector"
   >
     <label>

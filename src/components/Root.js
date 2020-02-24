@@ -9,7 +9,7 @@ const Root = ({ store }) => (
   <Provider store={store}>
     <BrowserRouter>
       <div>
-        <ul>
+        <ul className="navigation">
           <li>
             <Link to="/">Home</Link>
           </li>
