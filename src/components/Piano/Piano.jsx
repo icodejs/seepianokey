@@ -157,21 +157,25 @@ class Piano extends Component {
   renderNote = pianoOctave => (k, noteIndex) => {
     const { notesPressed, scaleGuideNotes } = this.props;
     const note = flatNotes[noteIndex];
+    const id = `${note}_${pianoOctave}`;
     const selected = notesPressed.find(({ name, octave }) => {
       return flatToSharp(name) === flatToSharp(note) && octave === pianoOctave;
     });
 
-    const scaleGuideNote = scaleGuideNotes.find((n, scaleKeyIndex) => {
-      return flatToSharp(n) === flatToSharp(note);
-    });
+    const scaleGuideNote = scaleGuideNotes.find((n, i) => {
+      const [noteName, noteOctave] = n.split(/(\d)/).filter(a => a);
 
-    const noteId = `${note}_${pianoOctave}`;
+      return (
+        flatToSharp(noteName) === flatToSharp(note) &&
+        parseInt(pianoOctave, 10) === parseInt(noteOctave, 10)
+      );
+    });
 
     return (
       <li
-        key={noteId}
+        key={id}
         onClick={this.handleNoteClicked(note, pianoOctave)}
-        className={classNames(noteId, {
+        className={classNames(id, {
           selected,
           'scale-guide-note': scaleGuideNote,
         })}
@@ -185,15 +189,22 @@ class Piano extends Component {
       ({ octaves }) => octaves === numberOfKeyboardOctaves,
     );
 
-    return [...Array(numberOfKeyboardOctaves)].map((o, index) => {
-      const pianoOctave = index + octavesOption.startingOctave;
+    return (
+      <div className="piano">
+        {[...Array(numberOfKeyboardOctaves)].map((o, index) => {
+          const pianoOctave = index + octavesOption.startingOctave;
 
-      return (
-        <ul key={`octave-${pianoOctave}`} className={`octave-${pianoOctave}`}>
-          {[...Array(KEYS_PER_OCTAVE)].map(this.renderNote(pianoOctave))}
-        </ul>
-      );
-    });
+          return (
+            <ul
+              key={`octave-${pianoOctave}`}
+              className={`octave-${pianoOctave}`}
+            >
+              {[...Array(KEYS_PER_OCTAVE)].map(this.renderNote(pianoOctave))}
+            </ul>
+          );
+        })}
+      </div>
+    );
   }
 
   render() {
@@ -201,7 +212,7 @@ class Piano extends Component {
       <Fragment>
         {this.renderDeviceSelector()}
         {this.renderKeyboardKeysSelector()}
-        <div className="piano">{this.renderPiano()}</div>
+        {this.renderPiano()}
       </Fragment>
     );
   }

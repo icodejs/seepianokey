@@ -15,10 +15,10 @@
 
 1. Assist user by showing each chord on keyboard or keys in scale (Use toggle for each helper option)
 2. Selecting a tonic and progression should trigger an event that builds a lesson and stores it in state. This state should then be passed down and used by app, e.g. piano guide notes and progression test.
-3. Put notes on keys
+3. Put notes names on keys i.e. b#4
 4. Buttons to choose chord progression
 5. Help instructions
-6. Make sure correct octave is pressed and extract octave from notes pressed and noted needed for comparison.
+6. ~~Make sure correct octave is pressed and extract octave from notes pressed and noted needed for comparison.~~
 
 ## Useful videos
 

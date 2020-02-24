@@ -107,7 +107,10 @@ class Lessons extends Component {
     }
 
     const displayRows = [this.renderChordTestInformation()];
-    const scaleNotes = chords[tonic].map(chord => chord.tonic);
+    const scaleNotes = chords[tonic].map(chord => {
+      const containsOctave = chord.tonic.search(/(\d)/) > -1;
+      return containsOctave ? chord.tonic : chord.tonic + chord.aliases[0];
+    });
 
     return (
       <div className="Lessons">
