@@ -10,6 +10,26 @@ import { progressionTest } from '../../lessons/chords';
 
 import './Lessons.scss';
 
+const getChordGuideNotes = ({
+  chordProgression,
+  chordsInKey,
+  interval,
+  octave,
+}) => {
+  if (interval > 2) {
+    return [];
+  }
+
+  return chordsInKey
+    .find(
+      chord =>
+        chord.scaleDegree === chordProgression.numericIntervals[interval],
+    )
+    .notes.map(key => key + octave);
+};
+
+let currentProgressionTest = [];
+
 class Lessons extends Component {
   constructor(props) {
     super(props);
@@ -71,13 +91,22 @@ class Lessons extends Component {
     const { notesPressed } = this.state;
     const { tonic, chords, chordProgressions } = this.props;
 
-    // NOTE USE STATE TO HANDLE INSTRUCTION / PROGRESS
-    const testResults = progressionTest({
-      notesPressed,
-      tonic,
-      lesson: chordProgressions[0],
-      chordsInKey: chords[tonic],
-    });
+    // NOTE: USE STATE TO HANDLE INSTRUCTION / PROGRESS
+    const testResults = progressionTest(
+      {
+        notesPressed,
+        tonic,
+        lesson: chordProgressions[0],
+        chordsInKey: chords[tonic],
+        currentProgressionTest,
+      },
+      (matchedChord, completed) => {
+        if (completed) {
+          currentProgressionTest = [];
+        }
+        currentProgressionTest.push(matchedChord);
+      },
+    );
 
     return (
       <Fragment>
@@ -90,26 +119,26 @@ class Lessons extends Component {
     const {
       tonic,
       tonics,
+      scales,
       chords,
-      selectedDevice,
       chordProgressions,
+      selectedDevice,
       webMidiSupported,
+      defaultOctave,
     } = this.props;
-    const {
-      notesPressed,
-      midiInputs,
-      selectedProgression,
-      showGuideNotes,
-    } = this.state;
+    const { notesPressed, midiInputs, showGuideNotes } = this.state;
 
     if (!webMidiSupported) {
       return <div className="error">WebMidi is not supported</div>;
     }
 
     const displayRows = [this.renderChordTestInformation()];
-    const scaleNotes = chords[tonic].map(chord => {
-      const containsOctave = chord.tonic.search(/(\d)/) > -1;
-      return containsOctave ? chord.tonic : chord.tonic + chord.aliases[0];
+    const scaleNotes = scales[tonic].notes;
+    const chordNotes = getChordGuideNotes({
+      chordProgression: chordProgressions[0],
+      chordsInKey: chords[tonic],
+      interval: currentProgressionTest.length,
+      octave: defaultOctave,
     });
 
     return (
@@ -120,11 +149,6 @@ class Lessons extends Component {
             onLessonSelection={this.handleTonicSelection}
             selectedValue={tonic}
           />
-          <LessonSelector
-            lessons={chordProgressions}
-            onLessonSelection={this.handleChordProgressionSelection}
-            selectedValue={JSON.stringify(selectedProgression)}
-          />
         </div>
 
         <Display rows={displayRows} />
@@ -134,7 +158,9 @@ class Lessons extends Component {
           onNoteOff={this.handleOnNoteOff}
           midiInputDevice={selectedDevice.input}
           notesPressed={notesPressed}
-          scaleGuideNotes={showGuideNotes ? scaleNotes : []}
+          guideNotes={
+            showGuideNotes ? { scale: scaleNotes, chord: chordNotes } : null
+          }
           onNoteClick={this.handleNoteClick}
           midiInputs={midiInputs}
           handleDeviceSelection={this.handleDeviceSelection}

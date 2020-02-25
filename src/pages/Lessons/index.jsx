@@ -9,6 +9,8 @@ const mapStateToProps = ({
   tonics,
   tonic,
   chords,
+  scales,
+  defaultOctave,
   chordProgressions,
 }) => ({
   selectedDevice,
@@ -16,6 +18,8 @@ const mapStateToProps = ({
   tonics,
   tonic,
   chords,
+  scales,
+  defaultOctave,
   chordProgressions,
 });
 

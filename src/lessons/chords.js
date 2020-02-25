@@ -6,11 +6,9 @@ import { scale } from '@tonaljs/scale';
 
 const TRIAD_CHORD_LENGTH = 3;
 
-let currentProgressionTest = [];
-
-export const getChordsInKey = ({ tonic, scaleType = 'major', octave = 4 }) => {
-  const key =
-    scaleType === 'major' ? majorKey(`${tonic}${octave}`) : minorKey(tonic);
+export const getChordsInKey = ({ tonic, scaleType = 'major', octave }) => {
+  const tonicKey = octave ? `${tonic}${octave}` : tonic;
+  const key = scaleType === 'major' ? majorKey(tonicKey) : minorKey(tonicKey);
 
   // We are only interested in triads so remove references to seventh chords for now
   return key.chords
@@ -29,11 +27,8 @@ export const getChordsInKey = ({ tonic, scaleType = 'major', octave = 4 }) => {
     });
 };
 
-export const getScaleForKey = ({ tonic, scaleType = 'major', octave = 4 }) => {
-  return {
-    scale: scale(`${tonic}${octave} ${scaleType}`),
-  };
-};
+export const getScaleForKey = ({ tonic, scaleType = 'major', octave = 4 }) =>
+  scale(`${tonic}${octave} ${scaleType}`);
 
 const findChordMatch = ({
   chordsInKey,
@@ -45,18 +40,16 @@ const findChordMatch = ({
   }
 
   return chordsInKey.find(({ notes }) => {
-    return notes.every(key => {
-      return noteNames.includes(key);
+    return notes.every(note => {
+      return noteNames.includes(note);
     });
   });
 };
 
-export const progressionTest = ({
-  notesPressed,
-  tonic,
-  lesson,
-  chordsInKey,
-}) => {
+export const progressionTest = (
+  { notesPressed, tonic, lesson, chordsInKey, currentProgressionTest },
+  callback,
+) => {
   const noteNames = notesPressed.map(R.prop('name'));
   const matchedChord = findChordMatch({
     noteNames,
@@ -67,19 +60,18 @@ export const progressionTest = ({
     return;
   }
 
-  currentProgressionTest.push(matchedChord);
+  const completed =
+    currentProgressionTest.length === lesson.romanIntervals.length;
 
-  const completed = currentProgressionTest.length === lesson.length;
+  callback(matchedChord, completed);
 
   if (completed) {
     const attempt = currentProgressionTest.map(({ tonic }) => tonic);
-    const answer = fromRomanNumerals(tonic, lesson);
+    const answer = fromRomanNumerals(tonic, lesson.romanIntervals);
     const correct = R.equals(attempt, answer);
     const attemptDetails = currentProgressionTest
       .map(({ name }) => name)
       .join(' => ');
-
-    currentProgressionTest = [];
 
     return correct
       ? `PERFECT! Correct answer = ${attemptDetails}`

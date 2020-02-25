@@ -8,7 +8,7 @@ import {
 import { getChordsInKey, getScaleForKey } from '../lessons/chords';
 
 const tonics = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // add accidentals
-const octave = 4;
+const defaultOctave = 4;
 const scaleType = 'major';
 
 export const initialState = {
@@ -18,12 +18,13 @@ export const initialState = {
     output: null,
   },
   webMidiSupported: false,
-  tonic: 'C',
+  defaultOctave,
+  tonic: 'C', // default
   tonics,
   chords: tonics.reduce((acc, tonic) => {
     acc[tonic] = getChordsInKey({
       tonic,
-      octave,
+      // octave,
       scaleType,
     });
     return acc;
@@ -31,17 +32,21 @@ export const initialState = {
   scales: tonics.reduce((acc, tonic) => {
     acc[tonic] = getScaleForKey({
       tonic,
-      octave,
+      octave: defaultOctave,
       scaleType,
     });
     return acc;
   }, {}),
   chordProgressions: [
-    ['II', 'V', 'I'],
-    ['I', 'IV', 'V', 'V'],
-    ['I', 'I', 'IV', 'V'],
-    ['I', 'IV', 'I', 'V'],
-    ['I', 'IV', 'V', 'IV'],
+    {
+      name: '2-5-1',
+      romanIntervals: ['II', 'V', 'I'],
+      numericIntervals: [2, 5, 1],
+    },
+    // ['I', 'IV', 'V', 'V'],
+    // ['I', 'I', 'IV', 'V'],
+    // ['I', 'IV', 'I', 'V'],
+    // ['I', 'IV', 'V', 'IV'],
   ],
 };
 
