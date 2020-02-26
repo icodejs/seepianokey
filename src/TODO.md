@@ -20,6 +20,41 @@
 5. Help instructions
 6. ~~Make sure correct octave is pressed and extract octave from notes pressed and noted needed for comparison.~~
 
+## Phase 4
+
+1. Create events / actions to get the game going
+
+```js
+// Every time a new game is started this object will be created.
+// Need these values stored somewhere as option for use to select via the UI.
+
+const game = {
+  id: null,
+  type: null, // chords|scales
+  tonic: null, // C,C#, D
+  progression: {
+    name: '2-5-1',
+    romanNumeralIntervals: ['II', 'V', 'I'],
+    numericIntervals: ['2', '5', '1'],
+  },
+  answers: [
+    ['C', 'E', 'G'],
+    ['E', 'G', 'B'],
+    ['D', 'F', 'A'],
+  ], // array of arrays with all chords
+  current: [], // chords that need to be played next
+  status: 'idle', // in-progress, idle, success, failure
+  // text will use template string to add custom info
+  question: `Play the {progression-here} chord progression.`,
+  idleText: 'Press start to begin.',
+  inProgressText: 'Please enter next chord',
+  successText: 'Brilliant. You have enter chord progression correctly',
+  errorText: 'Incorrect. One or more chords was incorrect. Please try again.',
+  helpText: 'If you need help, you can switch on not guide.',
+  loadingText: 'Loading...',
+};
+```
+
 ## Useful videos
 
 - https://www.youtube.com/watch?v=vzujwexshe4
