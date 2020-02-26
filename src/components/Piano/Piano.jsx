@@ -6,7 +6,7 @@ import { toMidi } from '@tonaljs/midi';
 import DeviceSelection from '../../components/DeviceSelection';
 
 import { getDevice, setDeviceOctaves } from '../../client/localStorage';
-import { flatNotes, flatToSharp, octavesOptions } from '../../config';
+import { flatNotes, octavesOptions, notesAreEqual } from '../../config';
 import { addNote, removeNote, containsNote } from '../../utils/notes';
 import './Piano.scss';
 
@@ -159,14 +159,14 @@ class Piano extends Component {
     const note = flatNotes[noteIndex];
     const id = `${note}_${pianoOctave}`;
     const selected = notesPressed.find(({ name, octave }) => {
-      return flatToSharp(name) === flatToSharp(note) && octave === pianoOctave;
+      return notesAreEqual(name, note) && octave === pianoOctave;
     });
 
-    const scaleGuideNote = guideNotes.chord.find((n, i) => {
+    const scaleGuideNote = guideNotes.scale.find((n, i) => {
       const [noteName, noteOctave] = n.split(/(\d)/).filter(a => a);
 
       return (
-        flatToSharp(noteName) === flatToSharp(note) &&
+        notesAreEqual(noteName, note) &&
         parseInt(pianoOctave, 10) === parseInt(noteOctave, 10)
       );
     });

@@ -98,6 +98,9 @@ export const flatToSharp = note => {
   return notes[note] || note;
 };
 
+export const notesAreEqual = (a, b) =>
+  flatToSharp(a) === flatToSharp(b) || sharpToFlat(a) === sharpToFlat(b);
+
 // const modules = [
 //   {
 //     id: 'scales',
