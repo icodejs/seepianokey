@@ -3,6 +3,7 @@ import {
   SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
   SET_WEB_MIDI_SUPPORTED,
   SELECT_TONIC,
+  START_GAME,
 } from './action-types';
 
 export const selectMidiController = ({ selectedDevice }) => ({
@@ -26,3 +27,10 @@ export const selectTonic = ({ tonic }) => {
     tonic,
   };
 };
+
+export const startGame = ({ tonic, gameType }) => ({
+  type: START_GAME,
+  id: new Date().getTime(),
+  tonic,
+  gameType,
+});

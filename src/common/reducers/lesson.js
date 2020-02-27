@@ -3,9 +3,9 @@ import {
   SELECT_NUMBER_OF_KEYBOARD_OCTAVES,
   SET_WEB_MIDI_SUPPORTED,
   SELECT_TONIC,
-} from './action-types';
+} from '../action-types';
 
-import { getChordsInKey, getScaleForKey } from '../lessons/chords';
+import { getChordsInKey, getScaleForKey } from '../../lessons/chords';
 
 const tonics = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // add accidentals
 const defaultOctave = 4;
@@ -50,7 +50,7 @@ export const initialState = {
   ],
 };
 
-function seePianoKeyApp(state = initialState, action) {
+function lesson(state = initialState, action) {
   switch (action.type) {
     case SELECT_MIDI_CONTROLLER:
       return {
@@ -77,4 +77,4 @@ function seePianoKeyApp(state = initialState, action) {
   }
 }
 
-export default seePianoKeyApp;
+export default lesson;

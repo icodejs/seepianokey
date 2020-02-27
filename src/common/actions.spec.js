@@ -65,4 +65,24 @@ describe('actions', () => {
       expect(result).toEqual(expectedResult);
     });
   });
+
+  describe('startGame', () => {
+    it('should initialise a game with the base state', () => {
+      const tonic = 'B';
+      const gameType = 'Chord';
+
+      const result = actions.startGame({
+        tonic,
+        gameType,
+      });
+
+      const expectedResult = {
+        type: types.START_GAME,
+        tonic,
+        gameType,
+      };
+
+      expect(result).toMatchObject(expectedResult);
+    });
+  });
 });

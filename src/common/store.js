@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import logger from 'redux-logger';
-import reducer from './reducer';
+import reducer from './reducers';
 
 export default function configureStore(initialState) {
   const composeEnhancers =

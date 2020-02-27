@@ -87,6 +87,11 @@ class Lessons extends Component {
     console.log('note mouse click', noteClicked);
   }
 
+  handleStartGameClick = event => {
+    event.preventDefault();
+    this.props.startGame({ tonic: 'C', gameType: 'Chord' });
+  };
+
   renderChordTestInformation() {
     const { notesPressed } = this.state;
     const { tonic, chords, chordProgressions } = this.props;
@@ -149,6 +154,9 @@ class Lessons extends Component {
             onLessonSelection={this.handleTonicSelection}
             selectedValue={tonic}
           />
+          <button type="button" onClick={this.handleStartGameClick}>
+            Start Game
+          </button>
         </div>
 
         <Display rows={displayRows} />

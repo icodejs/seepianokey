@@ -4,14 +4,16 @@ import Lessons from './Lessons';
 import * as actions from '../../common/actions';
 
 const mapStateToProps = ({
-  selectedDevice,
-  webMidiSupported,
-  tonics,
-  tonic,
-  chords,
-  scales,
-  defaultOctave,
-  chordProgressions,
+  lesson: {
+    selectedDevice,
+    webMidiSupported,
+    tonics,
+    tonic,
+    chords,
+    scales,
+    defaultOctave,
+    chordProgressions,
+  },
 }) => ({
   selectedDevice,
   webMidiSupported,
