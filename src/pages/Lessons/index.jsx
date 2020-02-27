@@ -5,24 +5,28 @@ import * as actions from '../../common/actions';
 
 const mapStateToProps = ({
   lesson: {
-    selectedDevice,
-    webMidiSupported,
-    tonics,
-    tonic,
-    chords,
-    scales,
-    defaultOctave,
     chordProgressions,
+    chords,
+    defaultOctave,
+    lessonTypes,
+    scales,
+    selectedDevice,
+    selectedLessonType,
+    tonic,
+    tonics,
+    webMidiSupported,
   },
 }) => ({
-  selectedDevice,
-  webMidiSupported,
-  tonics,
-  tonic,
-  chords,
-  scales,
-  defaultOctave,
   chordProgressions,
+  chords,
+  defaultOctave,
+  lessonTypes,
+  scales,
+  selectedDevice,
+  selectedLessonType,
+  tonic,
+  tonics,
+  webMidiSupported,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

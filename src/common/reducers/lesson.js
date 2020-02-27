@@ -7,6 +7,7 @@ import {
 
 import { getChordsInKey, getScaleForKey } from '../../lessons/chords';
 
+const lessonTypes = ['Scales', 'Chords'];
 const tonics = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // add accidentals
 const defaultOctave = 4;
 const scaleType = 'major';
@@ -21,6 +22,8 @@ export const initialState = {
   defaultOctave,
   tonic: 'C', // default
   tonics,
+  lessonTypes,
+  selectedLessonType: '',
   chords: tonics.reduce((acc, tonic) => {
     acc[tonic] = getChordsInKey({
       tonic,

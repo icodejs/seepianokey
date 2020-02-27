@@ -2,7 +2,7 @@ import { START_GAME } from '../action-types';
 
 export const initialState = {
   id: null,
-  gameType: null, // chords|scales
+  lessonType: null, // chords|scales
   tonic: null, // C,C#, D
   progression: null,
   answers: [], // array of arrays with all chords
@@ -25,7 +25,7 @@ function game(state = initialState, action) {
         ...state,
         id: action.id,
         tonic: action.tonic,
-        gameType: action.gameType,
+        lessonType: action.lessonType,
       };
     default:
       return state;

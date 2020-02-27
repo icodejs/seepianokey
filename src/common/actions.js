@@ -28,9 +28,9 @@ export const selectTonic = ({ tonic }) => {
   };
 };
 
-export const startGame = ({ tonic, gameType }) => ({
+export const startGame = ({ tonic, lessonType }) => ({
   type: START_GAME,
   id: new Date().getTime(),
   tonic,
-  gameType,
+  lessonType,
 });

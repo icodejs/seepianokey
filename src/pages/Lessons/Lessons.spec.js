@@ -8,6 +8,11 @@ describe('Lessons', () => {
     const props = {
       selectMidiController: () => {},
       setWebMidiSupported: () => {},
+      startGame: () => {},
+      chords: {},
+      scales: {},
+      tonic: 'C',
+      tonics: [],
       webMidiSupported: false,
     };
 

@@ -89,7 +89,8 @@ class Lessons extends Component {
 
   handleStartGameClick = event => {
     event.preventDefault();
-    this.props.startGame({ tonic: 'C', gameType: 'Chord' });
+    const { tonic } = this.props;
+    this.props.startGame({ tonic, lessonType: 'Chord' });
   };
 
   renderChordTestInformation() {
@@ -180,14 +181,21 @@ class Lessons extends Component {
 }
 
 Lessons.propTypes = {
+  chords: PropTypes.object.isRequired,
+  scales: PropTypes.object.isRequired,
+  selectedDevice: PropTypes.object,
+  selectedLessonType: PropTypes.string,
   selectMidiController: PropTypes.func.isRequired,
   setWebMidiSupported: PropTypes.func.isRequired,
+  startGame: PropTypes.func.isRequired,
+  tonic: PropTypes.string.isRequired,
+  tonics: PropTypes.array.isRequired,
   webMidiSupported: PropTypes.bool.isRequired,
-  selectedDevice: PropTypes.object,
 };
 
 Lessons.defaultProps = {
   selectedDevice: {},
+  selectedLessonType: 'Chord',
 };
 
 export default Lessons;
