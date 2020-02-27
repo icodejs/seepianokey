@@ -1,4 +1,4 @@
-# See Piano Key
+# Chord Shark
 
 Uses webmidi and React to create web based Piano tests.
 
