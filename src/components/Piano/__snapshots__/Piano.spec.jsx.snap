@@ -33,7 +33,7 @@ Array [
     <label>
       <select
         onChange={[Function]}
-        value={2}
+        value={4}
       >
         <option
           value={2}
@@ -66,6 +66,58 @@ Array [
   <div
     className="piano"
   >
+    <ul
+      className="octave-2"
+    >
+      <li
+        className="C_2"
+        onClick={[Function]}
+      />
+      <li
+        className="Db_2"
+        onClick={[Function]}
+      />
+      <li
+        className="D_2"
+        onClick={[Function]}
+      />
+      <li
+        className="Eb_2"
+        onClick={[Function]}
+      />
+      <li
+        className="E_2"
+        onClick={[Function]}
+      />
+      <li
+        className="F_2"
+        onClick={[Function]}
+      />
+      <li
+        className="Gb_2"
+        onClick={[Function]}
+      />
+      <li
+        className="G_2"
+        onClick={[Function]}
+      />
+      <li
+        className="Ab_2"
+        onClick={[Function]}
+      />
+      <li
+        className="A_2"
+        onClick={[Function]}
+      />
+      <li
+        className="Bb_2"
+        onClick={[Function]}
+      />
+      <li
+        className="B_2"
+        onClick={[Function]}
+      />
+    </ul>
     <ul
       className="octave-3"
     >
@@ -167,6 +219,58 @@ Array [
       />
       <li
         className="B_4"
+        onClick={[Function]}
+      />
+    </ul>
+    <ul
+      className="octave-5"
+    >
+      <li
+        className="C_5"
+        onClick={[Function]}
+      />
+      <li
+        className="Db_5"
+        onClick={[Function]}
+      />
+      <li
+        className="D_5"
+        onClick={[Function]}
+      />
+      <li
+        className="Eb_5"
+        onClick={[Function]}
+      />
+      <li
+        className="E_5"
+        onClick={[Function]}
+      />
+      <li
+        className="F_5"
+        onClick={[Function]}
+      />
+      <li
+        className="Gb_5"
+        onClick={[Function]}
+      />
+      <li
+        className="G_5"
+        onClick={[Function]}
+      />
+      <li
+        className="Ab_5"
+        onClick={[Function]}
+      />
+      <li
+        className="A_5"
+        onClick={[Function]}
+      />
+      <li
+        className="Bb_5"
+        onClick={[Function]}
+      />
+      <li
+        className="B_5"
         onClick={[Function]}
       />
     </ul>

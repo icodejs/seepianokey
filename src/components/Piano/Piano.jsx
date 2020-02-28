@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import webmidi from 'webmidi';
 import classNames from 'classnames';
 import { toMidi } from '@tonaljs/midi';
 
@@ -44,27 +45,31 @@ class Piano extends Component {
     this.state = {
       deviceSet: false,
       notesPressed: [],
+      midiInputs: [],
     };
   }
 
-  onNoteOn = e => {
-    const note = parseNote(e);
-    this.props.onNoteOn(note);
-  };
+  componentDidMount() {
+    webmidi.enable(err => {
+      if (!err) {
+        this.props.setWebMidiSupported({ webMidiSupported: true });
 
-  onNoteOff = e => {
-    const note = parseNote(e);
-    this.props.onNoteOff(note);
-  };
+        this.setState({
+          midiInputs: [...webmidi.inputs],
+        });
+      }
+    });
+  }
 
   componentDidUpdate() {
-    const { midiInputDevice } = this.props;
     const { deviceSet } = this.state;
+    const { selectedDevice } = this.props;
+    const { input: midiInputDevice } = selectedDevice;
 
     if (midiInputDevice && !deviceSet) {
       this.setState({ deviceSet: true }, () => {
-        midiInputDevice.addListener('noteon', 'all', this.onNoteOn);
-        midiInputDevice.addListener('noteoff', 'all', this.onNoteOff);
+        midiInputDevice.addListener('noteon', 'all', this.handleNoteOn);
+        midiInputDevice.addListener('noteoff', 'all', this.handleNoteOff);
       });
 
       const { octaves } = getDevice();
@@ -80,11 +85,12 @@ class Piano extends Component {
   }
 
   componentWillUnmount() {
-    const { midiInputDevice } = this.props;
+    const { selectedDevice } = this.props;
+    const { input: midiInputDevice } = selectedDevice;
 
     if (midiInputDevice) {
-      midiInputDevice.removeListener('noteon', 'all', this.onNoteOn);
-      midiInputDevice.removeListener('noteoff', 'all', this.onNoteOff);
+      midiInputDevice.removeListener('noteon', 'all', this.handleNoteOn);
+      midiInputDevice.removeListener('noteoff', 'all', this.handleNoteOff);
     }
   }
 
@@ -104,6 +110,20 @@ class Piano extends Component {
     const event = createPianoKeyEvent(note, pianoOctave);
     this.toggleNote(event);
     this.props.onNoteClick(event);
+  };
+
+  handleDeviceSelection = ({ selectedDevice }) => {
+    this.props.selectMidiController({ selectedDevice });
+  };
+
+  handleNoteOn = e => {
+    const note = parseNote(e);
+    this.props.onNoteOn(note);
+  };
+
+  handleNoteOff = e => {
+    const note = parseNote(e);
+    this.props.onNoteOff(note);
   };
 
   toggleNote(note) {
@@ -142,13 +162,14 @@ class Piano extends Component {
   );
 
   renderDeviceSelector = () => {
-    const { midiInputs, handleDeviceSelection, selectedDevice } = this.props;
+    const { selectedDevice } = this.props;
+    const { midiInputs } = this.state;
     return (
       <DeviceSelection
         {...{
           midiInputs,
           selectedDevice,
-          onDeviceSelection: handleDeviceSelection,
+          onDeviceSelection: this.handleDeviceSelection,
         }}
       />
     );
@@ -208,6 +229,10 @@ class Piano extends Component {
   }
 
   render() {
+    if (!this.props.webMidiSupported) {
+      return <div className="error">WebMidi is not supported</div>;
+    }
+
     return (
       <Fragment>
         {this.renderDeviceSelector()}
@@ -230,13 +255,18 @@ Piano.propTypes = {
     scale: PropTypes.array,
     chord: PropTypes.array,
   }),
+  selectedDevice: PropTypes.object,
+  selectedLessonType: PropTypes.string,
+  selectMidiController: PropTypes.func.isRequired,
+  setWebMidiSupported: PropTypes.func.isRequired,
+  webMidiSupported: PropTypes.bool.isRequired,
 };
 
 Piano.defaultProps = {
   notesPressed: [],
   guideNotes: { scale: [], chord: [] },
-  numberOfKeyboardOctaves: 2,
   onNoteClick: () => {},
+  selectedDevice: {},
 };
 
 export default Piano;

@@ -3,11 +3,14 @@ import { bindActionCreators } from 'redux';
 import Piano from './Piano';
 import * as actions from '../../common/actions';
 
-const mapStateToProps = ({ numberOfKeyboardOctaves }) => ({
+const mapStateToProps = ({
+  app: { numberOfKeyboardOctaves, selectedDevice, webMidiSupported },
+}) => ({
   numberOfKeyboardOctaves,
+  selectedDevice,
+  webMidiSupported,
 });
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(actions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Piano);

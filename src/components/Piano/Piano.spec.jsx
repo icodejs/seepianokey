@@ -10,7 +10,16 @@ describe('Piano', () => {
         onNoteOn: () => {},
         onNoteOff: () => {},
         selectNumberOfKeyboardOctaves: () => {},
+        selectMidiController: () => {},
+        setWebMidiSupported: () => {},
         handleDeviceSelection: () => {},
+        webMidiSupported: true,
+        numberOfKeyboardOctaves: 4,
+      };
+
+      const component = renderer.create(<Piano {...props} />);
+
+      component.root.instance.setState({
         midiInputs: [
           {
             id: 'fake-id1',
@@ -25,8 +34,8 @@ describe('Piano', () => {
             type: 'fake-type',
           },
         ],
-      };
-      const json = renderer.create(<Piano {...props} />).toJSON();
+      });
+      const json = component.toJSON();
       expect(json).toMatchSnapshot();
     });
   });

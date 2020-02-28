@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import webmidi from 'webmidi';
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
@@ -20,12 +19,10 @@ const getChordGuideNotes = ({
     return [];
   }
 
-  return chordsInKey
-    .find(
-      chord =>
-        chord.scaleDegree === chordProgression.numericIntervals[interval],
-    )
-    .notes.map(key => key + octave);
+  const chordFound = chordsInKey.find(
+    chord => chord.scaleDegree === chordProgression.numericIntervals[interval],
+  );
+  return chordFound ? chordFound.notes.map(key => key + octave) : [];
 };
 
 let currentProgressionTest = [];
@@ -35,29 +32,12 @@ class Lessons extends Component {
     super(props);
 
     this.state = {
-      midiInputs: [],
       notesPressed: [],
       displayText: '',
       selectedProgression: [],
       showGuideNotes: true,
     };
   }
-
-  componentDidMount() {
-    webmidi.enable(err => {
-      if (!err) {
-        this.props.setWebMidiSupported({ webMidiSupported: true });
-
-        this.setState({
-          midiInputs: [...webmidi.inputs],
-        });
-      }
-    });
-  }
-
-  handleDeviceSelection = ({ selectedDevice }) => {
-    this.props.selectMidiController({ selectedDevice });
-  };
 
   handleTonicSelection = event => {
     const { value: tonic } = event.target;
@@ -128,16 +108,9 @@ class Lessons extends Component {
       scales,
       chords,
       chordProgressions,
-      selectedDevice,
-      webMidiSupported,
       defaultOctave,
     } = this.props;
-    const { notesPressed, midiInputs, showGuideNotes } = this.state;
-
-    if (!webMidiSupported) {
-      return <div className="error">WebMidi is not supported</div>;
-    }
-
+    const { notesPressed, showGuideNotes } = this.state;
     const displayRows = [this.renderChordTestInformation()];
     const scaleNotes = scales[tonic].notes;
     const chordNotes = getChordGuideNotes({
@@ -165,15 +138,11 @@ class Lessons extends Component {
         <Piano
           onNoteOn={this.handleOnNoteOn}
           onNoteOff={this.handleOnNoteOff}
-          midiInputDevice={selectedDevice.input}
           notesPressed={notesPressed}
           guideNotes={
             showGuideNotes ? { scale: scaleNotes, chord: chordNotes } : null
           }
           onNoteClick={this.handleNoteClick}
-          midiInputs={midiInputs}
-          handleDeviceSelection={this.handleDeviceSelection}
-          selectedDevice={selectedDevice}
         />
       </div>
     );
@@ -183,18 +152,12 @@ class Lessons extends Component {
 Lessons.propTypes = {
   chords: PropTypes.object.isRequired,
   scales: PropTypes.object.isRequired,
-  selectedDevice: PropTypes.object,
-  selectedLessonType: PropTypes.string,
-  selectMidiController: PropTypes.func.isRequired,
-  setWebMidiSupported: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
   tonic: PropTypes.string.isRequired,
   tonics: PropTypes.array.isRequired,
-  webMidiSupported: PropTypes.bool.isRequired,
 };
 
 Lessons.defaultProps = {
-  selectedDevice: {},
   selectedLessonType: 'Chord',
 };
 

@@ -10,11 +10,9 @@ const mapStateToProps = ({
     defaultOctave,
     lessonTypes,
     scales,
-    selectedDevice,
     selectedLessonType,
     tonic,
     tonics,
-    webMidiSupported,
   },
 }) => ({
   chordProgressions,
@@ -22,11 +20,9 @@ const mapStateToProps = ({
   defaultOctave,
   lessonTypes,
   scales,
-  selectedDevice,
   selectedLessonType,
   tonic,
   tonics,
-  webMidiSupported,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
