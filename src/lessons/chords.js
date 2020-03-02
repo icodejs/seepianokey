@@ -27,8 +27,13 @@ export const getChordsInKey = ({ tonic, scaleType = 'major', octave }) => {
     });
 };
 
-export const getScaleForKey = ({ tonic, scaleType = 'major', octave = 4 }) =>
-  scale(`${tonic}${octave} ${scaleType}`);
+export const getScaleForKey = ({ tonic, scaleType = 'major', octave = 4 }) => {
+  const scaleData = scale(`${tonic}${octave} ${scaleType}`);
+  return {
+    ...scaleData,
+    notes: [...scaleData.notes, `${tonic}${octave + 1}`], // Completes scale
+  };
+};
 
 const findChordMatch = ({
   chordsInKey,
