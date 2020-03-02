@@ -2,6 +2,8 @@
 
 Uses webmidi and React to create web based Piano tests.
 
+[DEMO](https://chordshark.herokuapp.com/lessons)
+
 ![](public/img/IMG_20200218_105747~2.jpg)
 
 ## Available Scripts
