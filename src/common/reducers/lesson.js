@@ -1,8 +1,11 @@
+import { chromatic } from '@tonaljs/range';
 import { SELECT_TONIC } from '../action-types';
 import { getChordsInKey, getScaleForKey } from '../../lessons/chords';
 
-const lessonTypes = ['Scales', 'Chords'];
-const tonics = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // add accidentals
+const tonics = chromatic(['C2', 'B2'], { sharps: false }).map(tonic =>
+  tonic.replace(/(\d)/, ''),
+);
+
 const defaultOctave = 4;
 const scaleType = 'major';
 
@@ -10,7 +13,6 @@ export const initialState = {
   defaultOctave,
   tonic: 'C', // default
   tonics,
-  lessonTypes,
   selectedLessonType: '',
   chords: tonics.reduce((acc, tonic) => {
     acc[tonic] = getChordsInKey({

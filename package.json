@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@tonaljs/modules": "^3.4.2",
+    "@tonaljs/range": "^3.2.4",
     "classnames": "^2.2.6",
     "dotenv": "^7.0.0",
     "envalid": "^4.2.2",

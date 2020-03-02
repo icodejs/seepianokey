@@ -1271,7 +1271,7 @@
     "@tonaljs/roman-numeral" "^3.3.0"
     "@tonaljs/tonal" "^3.2.2"
 
-"@tonaljs/range@^3.2.3":
+"@tonaljs/range@^3.2.3", "@tonaljs/range@^3.2.4":
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/@tonaljs/range/-/range-3.2.4.tgz#ddcced07806b844cef1084d4a6498dd70001dbf2"
   integrity sha512-KzgHRuISKLxyfIL37JAK/H/+JyPoZZubDqSkDhNrGKFzqDgD/4zzkAuitHmZjSgmZurMw2sSQv2gAmpfkIYgAA==
