@@ -4,6 +4,7 @@ import {
   SET_WEB_MIDI_SUPPORTED,
   SELECT_TONIC,
   START_GAME,
+  SELECT_CHORD_PROGRESSION,
 } from './action-types';
 
 export const selectMidiController = ({ selectedDevice }) => ({
@@ -21,12 +22,15 @@ export const setWebMidiSupported = ({ webMidiSupported }) => ({
   webMidiSupported,
 });
 
-export const selectTonic = ({ tonic }) => {
-  return {
-    type: SELECT_TONIC,
-    tonic,
-  };
-};
+export const selectTonic = ({ tonic }) => ({
+  type: SELECT_TONIC,
+  tonic,
+});
+
+export const selectChordProgression = ({ id }) => ({
+  type: SELECT_CHORD_PROGRESSION,
+  id,
+});
 
 export const startGame = ({ tonic, lessonType }) => ({
   type: START_GAME,

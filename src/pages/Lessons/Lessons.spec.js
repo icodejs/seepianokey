@@ -11,6 +11,7 @@ describe('Lessons', () => {
   it('renders without crashing', () => {
     const props = {
       startGame: () => {},
+      selectChordProgression: () => {},
       chords: {
         C: [],
       },
@@ -19,6 +20,7 @@ describe('Lessons', () => {
       tonics: [],
       chordProgressions: [
         {
+          id: '2-5-1',
           name: '2-5-1',
           romanIntervals: ['II', 'V', 'I'],
           numericIntervals: [2, 5, 1],

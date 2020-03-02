@@ -24,7 +24,12 @@
 
 1. Create events / actions to get the game going
 2. How can the UI option be build programmatically
+
+- Add list of progressions to choose from
+
 3. Work out how to initialise a game base on user input
+
+- When start game is pressed fire event and init a game
 
 ```js
 // Every time a new game is started this object will be created.

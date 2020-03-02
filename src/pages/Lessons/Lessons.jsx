@@ -5,7 +5,7 @@ import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import LessonSelector from '../../components/LessonSelector';
 import { addNote, removeNote } from '../../utils/notes';
-import { progressionTest } from '../../lessons/chords';
+import { progressionTest } from '../../lessons/utils';
 
 import './Lessons.scss';
 
@@ -34,7 +34,6 @@ class Lessons extends Component {
     this.state = {
       notesPressed: [],
       displayText: '',
-      selectedProgression: [],
       showGuideNotes: true,
     };
   }
@@ -46,7 +45,7 @@ class Lessons extends Component {
 
   handleChordProgressionSelection = event => {
     const { value: selectedProgression } = event.target;
-    this.setState({ selectedProgression });
+    this.props.selectChordProgression({ id: selectedProgression });
   };
 
   handleOnNoteOn = note => {
@@ -71,6 +70,33 @@ class Lessons extends Component {
     event.preventDefault();
     const { tonic } = this.props;
     this.props.startGame({ tonic, lessonType: 'Chord' });
+  };
+
+  renderChordProgressionSelector = () => {
+    const { chordProgressions } = this.props;
+    const selectedChordProgression = chordProgressions.find(
+      ({ selected }) => selected,
+    ) || { id: -1 };
+
+    return (
+      <form className="chord-progression-selector">
+        <label>
+          <select
+            value={selectedChordProgression.id}
+            onChange={this.handleChordProgressionSelection}
+          >
+            <option value="-1">Choose progression</option>
+            {chordProgressions.map(({ name, id }) => {
+              return (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+      </form>
+    );
   };
 
   renderChordTestInformation() {
@@ -128,6 +154,7 @@ class Lessons extends Component {
             onLessonSelection={this.handleTonicSelection}
             selectedValue={tonic}
           />
+          {this.renderChordProgressionSelector()}
           <button type="button" onClick={this.handleStartGameClick}>
             Start Game
           </button>
@@ -153,8 +180,11 @@ Lessons.propTypes = {
   chords: PropTypes.object.isRequired,
   scales: PropTypes.object.isRequired,
   startGame: PropTypes.func.isRequired,
+  selectChordProgression: PropTypes.func.isRequired,
   tonic: PropTypes.string.isRequired,
   tonics: PropTypes.array.isRequired,
+  chordProgressions: PropTypes.array.isRequired,
+  selectedLessonType: PropTypes.string,
 };
 
 Lessons.defaultProps = {

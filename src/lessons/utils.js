@@ -6,7 +6,7 @@ import { scale } from '@tonaljs/scale';
 
 const TRIAD_CHORD_LENGTH = 3;
 
-export const getChordsInKey = ({ tonic, scaleType = 'major', octave }) => {
+export const getChordsInKey = ({ tonic, scaleType, octave }) => {
   const tonicKey = octave ? `${tonic}${octave}` : tonic;
   const key = scaleType === 'major' ? majorKey(tonicKey) : minorKey(tonicKey);
 
@@ -27,7 +27,7 @@ export const getChordsInKey = ({ tonic, scaleType = 'major', octave }) => {
     });
 };
 
-export const getScaleForKey = ({ tonic, scaleType = 'major', octave = 4 }) => {
+export const getScaleForKey = ({ tonic, scaleType, octave = 4 }) => {
   const scaleData = scale(`${tonic}${octave} ${scaleType}`);
   return {
     ...scaleData,
@@ -56,6 +56,10 @@ export const progressionTest = (
   callback,
 ) => {
   const noteNames = notesPressed.map(R.prop('name'));
+
+  // console.log('noteNames', noteNames);
+  // console.log('chordsInKey', chordsInKey);
+
   const matchedChord = findChordMatch({
     noteNames,
     chordsInKey,
@@ -74,6 +78,10 @@ export const progressionTest = (
     const attempt = currentProgressionTest.map(({ tonic }) => tonic);
     const answer = fromRomanNumerals(tonic, lesson.romanIntervals);
     const correct = R.equals(attempt, answer);
+
+    console.log('answer', answer);
+    console.log('attempt', attempt);
+
     const attemptDetails = currentProgressionTest
       .map(({ name }) => name)
       .join(' => ');

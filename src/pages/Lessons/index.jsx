@@ -12,6 +12,7 @@ const mapStateToProps = ({
     selectedLessonType,
     tonic,
     tonics,
+    selectChordProgression,
   },
 }) => ({
   chordProgressions,
@@ -21,6 +22,7 @@ const mapStateToProps = ({
   selectedLessonType,
   tonic,
   tonics,
+  selectChordProgression,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
