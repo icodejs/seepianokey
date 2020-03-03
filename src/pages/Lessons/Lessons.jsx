@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import LessonSelector from '../../components/LessonSelector';
-import { progressionTest, getChordGuideNotes } from '../../lessons/utils';
+import { getChordGuideNotes } from '../../lessons/utils';
 
 import './Lessons.scss';
 
@@ -100,35 +100,12 @@ class Lessons extends Component {
 
   // move this logic to reducer based on notes pressed
   renderChordTestInformation() {
-    const {
-      tonic,
-      chords,
-      chordProgressions,
-      defaultNumberOfNotesInChord,
-      notesPressed,
-    } = this.props;
-
-    // NOTE: USE STATE TO HANDLE INSTRUCTION / PROGRESS
-    const testResults = progressionTest(
-      {
-        notesPressed,
-        tonic,
-        chordProgression: getSelectedItem(chordProgressions),
-        chordsInKey: chords[tonic],
-        currentProgressionTest,
-        numberOfNotesInChord: defaultNumberOfNotesInChord,
-      },
-      (matchedChord, completed) => {
-        if (completed) {
-          currentProgressionTest = [];
-        }
-        currentProgressionTest.push(matchedChord);
-      },
-    );
+    const { games } = this.props;
+    const [game = {}] = [...games].reverse();
 
     return (
       <Fragment>
-        <p>{testResults}</p>
+        <p>{game.status}</p>
       </Fragment>
     );
   }
@@ -204,6 +181,7 @@ Lessons.propTypes = {
   tonic: PropTypes.string.isRequired,
   tonics: PropTypes.array.isRequired,
   notesPressed: PropTypes.array.isRequired,
+  lessonInProgress: PropTypes.bool.isRequired,
 };
 
 Lessons.defaultProps = {

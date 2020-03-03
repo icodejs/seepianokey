@@ -14,7 +14,9 @@ const mapStateToProps = ({
     tonic,
     tonics,
     notesPressed,
+    lessonInProgress,
   },
+  game: { games },
 }) => ({
   chordProgressions,
   chords,
@@ -25,6 +27,8 @@ const mapStateToProps = ({
   tonic,
   tonics,
   notesPressed,
+  lessonInProgress,
+  games,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

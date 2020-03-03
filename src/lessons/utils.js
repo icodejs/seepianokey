@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import { chord } from '@tonaljs/chord';
 import { majorKey, minorKey } from '@tonaljs/key';
-import { fromRomanNumerals } from '@tonaljs/progression';
 import { scale } from '@tonaljs/scale';
 
 const TRIAD_CHORD_LENGTH = 3;
@@ -51,65 +50,19 @@ export const getScaleForKey = ({ tonic, scaleType, octave = 4 }) => {
   };
 };
 
-const findChordMatch = ({
+export const findChordMatch = ({
   chordsInKey,
-  noteNames,
+  notesPressed,
   numberOfNotesInChord = TRIAD_CHORD_LENGTH, // Only interested in triad chords for now
 }) => {
-  if (noteNames.length !== numberOfNotesInChord) {
+  if (notesPressed.length !== numberOfNotesInChord) {
     return;
   }
+  const noteNames = notesPressed.map(R.prop('name'));
 
   return chordsInKey.find(({ notes }) => {
     return notes.every(note => {
       return noteNames.includes(note);
     });
   });
-};
-
-export const progressionTest = (
-  {
-    notesPressed,
-    tonic,
-    chordProgression,
-    chordsInKey,
-    currentProgressionTest,
-    numberOfNotesInChord,
-  },
-  callback,
-) => {
-  const noteNames = notesPressed.map(R.prop('name'));
-  const matchedChord = findChordMatch({
-    noteNames,
-    chordsInKey,
-    numberOfNotesInChord,
-  });
-
-  if (!matchedChord) {
-    return;
-  }
-
-  const completed =
-    currentProgressionTest.length === chordProgression.romanIntervals.length;
-
-  callback(matchedChord, completed);
-
-  if (completed) {
-    const attempt = currentProgressionTest.map(({ tonic }) => tonic);
-    const answer = fromRomanNumerals(tonic, chordProgression.romanIntervals);
-    const correct = R.equals(attempt, answer);
-
-    console.log('answer', answer);
-    console.log('attempt', attempt);
-
-    const attemptDetails = currentProgressionTest
-      .map(({ name }) => name)
-      .join(' => ');
-
-    return correct
-      ? `PERFECT! Correct answer = ${attemptDetails}`
-      : `Incorrect! Your answer = ${attemptDetails}. Correct answer = ${answer}`;
-  }
-
-  return `Chords left = ${3 - currentProgressionTest.length}`;
 };

@@ -49,6 +49,7 @@ export const initialState = {
       romanIntervals: ['II', 'V', 'I'],
       numericIntervals: [2, 5, 1],
       selected: true,
+      chordsInProgression: 3,
     },
     {
       id: '1-4-5-5',
@@ -56,6 +57,7 @@ export const initialState = {
       romanIntervals: ['I', 'IV', 'V', 'V'],
       numericIntervals: [1, 4, 5, 5],
       selected: false,
+      chordsInProgression: 4,
     },
     // ['I', 'IV', 'V', 'V'],
     // ['I', 'I', 'IV', 'V'],

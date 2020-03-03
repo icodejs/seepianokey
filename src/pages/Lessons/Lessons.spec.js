@@ -14,6 +14,7 @@ describe('Lessons', () => {
       selectChordProgression: () => {},
       registerNotePressed: () => {},
       registerNoteReleased: () => {},
+      lessonInProgress: false,
       defaultNumberOfNotesInChord: 1000,
       notesPressed: [],
       chords: {
@@ -30,6 +31,7 @@ describe('Lessons', () => {
           numericIntervals: [2, 5, 1],
         },
       ],
+      games: [],
     };
     const initialState = {
       app: {
