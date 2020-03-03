@@ -1,6 +1,7 @@
+import * as R from 'ramda';
 import { START_GAME } from '../action-types';
 
-export const initialState = {
+const gameTemplate = {
   id: null,
   lessonType: null, // chords|scales
   tonic: null, // C,C#, D
@@ -18,14 +19,29 @@ export const initialState = {
   loadingText: 'Loading...',
 };
 
+export const initialState = {
+  notesPressed: [],
+  games: [],
+};
+
 function game(state = initialState, action) {
   switch (action.type) {
     case START_GAME:
+      const progression = R.omit(['selected'], action.selectedChordProgression);
+
       return {
         ...state,
-        id: action.id,
-        tonic: action.tonic,
-        lessonType: action.lessonType,
+        games: [
+          ...state.games,
+          {
+            ...gameTemplate,
+            id: action.id,
+            tonic: action.tonic,
+            lessonType: action.selectedLessonType,
+            chords: action.chords,
+            progression,
+          },
+        ],
       };
     default:
       return state;

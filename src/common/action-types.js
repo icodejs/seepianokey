@@ -10,3 +10,4 @@ export const SELECT_TONIC = 'SELECT_TONIC';
 
 // game
 export const START_GAME = 'START_GAME';
+export const NOTES_PRESSED = 'NOTES_PRESSED';

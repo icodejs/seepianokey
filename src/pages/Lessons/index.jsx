@@ -8,21 +8,23 @@ const mapStateToProps = ({
     chordProgressions,
     chords,
     defaultOctave,
+    defaultNumberOfNotesInChord,
     scales,
     selectedLessonType,
     tonic,
     tonics,
-    selectChordProgression,
+    // notesPressed,
   },
 }) => ({
   chordProgressions,
   chords,
   defaultOctave,
+  defaultNumberOfNotesInChord,
   scales,
   selectedLessonType,
   tonic,
   tonics,
-  selectChordProgression,
+  // notesPressed,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

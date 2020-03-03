@@ -5,6 +5,7 @@ import {
   SELECT_TONIC,
   START_GAME,
   SELECT_CHORD_PROGRESSION,
+  NOTES_PRESSED,
 } from './action-types';
 
 export const selectMidiController = ({ selectedDevice }) => ({
@@ -32,9 +33,23 @@ export const selectChordProgression = ({ id }) => ({
   id,
 });
 
-export const startGame = ({ tonic, lessonType }) => ({
+export const startGame = ({
+  tonic,
+  selectedLessonType,
+  selectedChordProgression,
+  chords,
+  numberOfNotesInChord,
+}) => ({
   type: START_GAME,
   id: new Date().getTime(),
   tonic,
-  lessonType,
+  selectedLessonType,
+  selectedChordProgression,
+  chords,
+  numberOfNotesInChord,
 });
+
+// export const registerNotesPressed = ({ notes }) => ({
+//   type: NOTES_PRESSED,
+//   notes,
+// });

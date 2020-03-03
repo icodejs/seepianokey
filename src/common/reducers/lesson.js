@@ -1,23 +1,33 @@
 import { chromatic } from '@tonaljs/range';
-import { SELECT_TONIC, SELECT_CHORD_PROGRESSION } from '../action-types';
+import {
+  SELECT_TONIC,
+  SELECT_CHORD_PROGRESSION,
+  START_GAME,
+} from '../action-types';
 import { getChordsInKey, getScaleForKey } from '../../lessons/utils';
 
 const tonics = chromatic(['C2', 'B2'], { sharps: false }).map(tonic =>
   tonic.replace(/(\d)/, ''),
 );
 
+const defaultTonic = 'C';
 const defaultOctave = 4;
-const scaleType = 'major';
+const defaultNumberOfNotesInChord = 3;
+const defaultScaleType = 'major';
+const defaultLessonType = 'chord';
 
 export const initialState = {
+  notesPressed: [],
+  lessonInProgress: false,
   defaultOctave,
-  tonic: 'C', // default
+  defaultNumberOfNotesInChord,
+  tonic: defaultTonic,
   tonics,
-  selectedLessonType: '',
+  selectedLessonType: defaultLessonType,
   chords: tonics.reduce((acc, tonic) => {
     acc[tonic] = getChordsInKey({
       tonic,
-      scaleType,
+      scaleType: defaultScaleType,
     });
     return acc;
   }, {}),
@@ -25,7 +35,7 @@ export const initialState = {
     acc[tonic] = getScaleForKey({
       tonic,
       octave: defaultOctave,
-      scaleType,
+      scaleType: defaultScaleType,
     });
     return acc;
   }, {}),
@@ -35,7 +45,7 @@ export const initialState = {
       name: '2-5-1',
       romanIntervals: ['II', 'V', 'I'],
       numericIntervals: [2, 5, 1],
-      selected: false,
+      selected: true,
     },
     {
       id: '1-4-5-5',
@@ -64,9 +74,14 @@ function lesson(state = initialState, action) {
         chordProgressions: state.chordProgressions.map(progression => {
           return {
             ...progression,
-            selected: progression.id === action.id ? true : false,
+            selected: progression.id === action.id,
           };
         }),
+      };
+    case START_GAME:
+      return {
+        ...state,
+        lessonInProgress: true, // use logic to determine this
       };
     default:
       return state;

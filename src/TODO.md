@@ -31,6 +31,8 @@
 
 - When start game is pressed fire event and init a game
 
+4. Adjust starting octave when using smaller keyboards
+
 ```js
 // Every time a new game is started this object will be created.
 // Need these values stored somewhere as option for use to select via the UI.

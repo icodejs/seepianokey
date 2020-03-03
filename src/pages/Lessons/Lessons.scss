@@ -10,7 +10,19 @@
     flex-direction: column;
   }
 
+  .chord-progression-selector {
+    display: inline-block;
+  }
+
   .info {
     height: 20vh;
+  }
+
+  .start-game {
+    display: block;
+    margin: 30px auto;
+    padding: 30px;
+    font-size: 16px;
+    border-radius: 5px;
   }
 }

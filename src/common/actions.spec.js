@@ -69,17 +69,17 @@ describe('actions', () => {
   describe('startGame', () => {
     it('should initialise a game with the base state', () => {
       const tonic = 'B';
-      const lessonType = 'Chord';
+      const selectedLessonType = 'Chord';
 
       const result = actions.startGame({
         tonic,
-        lessonType,
+        selectedLessonType,
       });
 
       const expectedResult = {
         type: types.START_GAME,
         tonic,
-        lessonType,
+        selectedLessonType,
       };
 
       expect(result).toMatchObject(expectedResult);

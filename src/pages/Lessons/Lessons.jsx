@@ -5,27 +5,13 @@ import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import LessonSelector from '../../components/LessonSelector';
 import { addNote, removeNote } from '../../utils/notes';
-import { progressionTest } from '../../lessons/utils';
+import { progressionTest, getChordGuideNotes } from '../../lessons/utils';
 
 import './Lessons.scss';
 
-const getChordGuideNotes = ({
-  chordProgression,
-  chordsInKey,
-  interval,
-  octave,
-}) => {
-  if (interval > 2) {
-    return [];
-  }
-
-  const chordFound = chordsInKey.find(
-    chord => chord.scaleDegree === chordProgression.numericIntervals[interval],
-  );
-  return chordFound ? chordFound.notes.map(key => key + octave) : [];
-};
-
 let currentProgressionTest = [];
+
+const getSelectedItem = items => items.find(({ selected }) => selected);
 
 class Lessons extends Component {
   constructor(props) {
@@ -68,8 +54,23 @@ class Lessons extends Component {
 
   handleStartGameClick = event => {
     event.preventDefault();
-    const { tonic } = this.props;
-    this.props.startGame({ tonic, lessonType: 'Chord' });
+
+    const {
+      tonic,
+      selectedLessonType,
+      chordProgressions,
+      startGame,
+      chords,
+      defaultNumberOfNotesInChord,
+    } = this.props;
+
+    startGame({
+      tonic,
+      selectedLessonType,
+      selectedChordProgression: getSelectedItem(chordProgressions),
+      chords: chords[tonic],
+      numberOfNotesInChord: defaultNumberOfNotesInChord,
+    });
   };
 
   renderChordProgressionSelector = () => {
@@ -99,18 +100,25 @@ class Lessons extends Component {
     );
   };
 
+  // move this logic to reducer based on notes pressed
   renderChordTestInformation() {
     const { notesPressed } = this.state;
-    const { tonic, chords, chordProgressions } = this.props;
+    const {
+      tonic,
+      chords,
+      chordProgressions,
+      defaultNumberOfNotesInChord,
+    } = this.props;
 
     // NOTE: USE STATE TO HANDLE INSTRUCTION / PROGRESS
     const testResults = progressionTest(
       {
         notesPressed,
         tonic,
-        lesson: chordProgressions[0],
+        chordProgression: getSelectedItem(chordProgressions),
         chordsInKey: chords[tonic],
         currentProgressionTest,
+        numberOfNotesInChord: defaultNumberOfNotesInChord,
       },
       (matchedChord, completed) => {
         if (completed) {
@@ -138,7 +146,11 @@ class Lessons extends Component {
     } = this.props;
     const { notesPressed, showGuideNotes } = this.state;
     const displayRows = [this.renderChordTestInformation()];
+
+    // move this logic to reducer
     const scaleNotes = scales[tonic].notes;
+
+    // move this logic to reducer
     const chordNotes = getChordGuideNotes({
       chordProgression: chordProgressions[0],
       chordsInKey: chords[tonic],
@@ -155,7 +167,11 @@ class Lessons extends Component {
             selectedValue={tonic}
           />
           {this.renderChordProgressionSelector()}
-          <button type="button" onClick={this.handleStartGameClick}>
+          <button
+            className="start-game"
+            type="button"
+            onClick={this.handleStartGameClick}
+          >
             Start Game
           </button>
         </div>
@@ -177,14 +193,16 @@ class Lessons extends Component {
 }
 
 Lessons.propTypes = {
+  chordProgressions: PropTypes.array.isRequired,
   chords: PropTypes.object.isRequired,
+  defaultNumberOfNotesInChord: PropTypes.number.isRequired,
+  // registerNotesPressed: PropTypes.func.isRequired,
   scales: PropTypes.object.isRequired,
-  startGame: PropTypes.func.isRequired,
   selectChordProgression: PropTypes.func.isRequired,
+  selectedLessonType: PropTypes.string,
+  startGame: PropTypes.func.isRequired,
   tonic: PropTypes.string.isRequired,
   tonics: PropTypes.array.isRequired,
-  chordProgressions: PropTypes.array.isRequired,
-  selectedLessonType: PropTypes.string,
 };
 
 Lessons.defaultProps = {

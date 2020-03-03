@@ -6,6 +6,22 @@ import { scale } from '@tonaljs/scale';
 
 const TRIAD_CHORD_LENGTH = 3;
 
+export const getChordGuideNotes = ({
+  chordProgression,
+  chordsInKey,
+  interval,
+  octave,
+}) => {
+  if (interval > 2) {
+    return [];
+  }
+
+  const chordFound = chordsInKey.find(
+    chord => chord.scaleDegree === chordProgression.numericIntervals[interval],
+  );
+  return chordFound ? chordFound.notes.map(key => key + octave) : [];
+};
+
 export const getChordsInKey = ({ tonic, scaleType, octave }) => {
   const tonicKey = octave ? `${tonic}${octave}` : tonic;
   const key = scaleType === 'major' ? majorKey(tonicKey) : minorKey(tonicKey);
@@ -52,17 +68,21 @@ const findChordMatch = ({
 };
 
 export const progressionTest = (
-  { notesPressed, tonic, lesson, chordsInKey, currentProgressionTest },
+  {
+    notesPressed,
+    tonic,
+    chordProgression,
+    chordsInKey,
+    currentProgressionTest,
+    numberOfNotesInChord,
+  },
   callback,
 ) => {
   const noteNames = notesPressed.map(R.prop('name'));
-
-  // console.log('noteNames', noteNames);
-  // console.log('chordsInKey', chordsInKey);
-
   const matchedChord = findChordMatch({
     noteNames,
     chordsInKey,
+    numberOfNotesInChord,
   });
 
   if (!matchedChord) {
@@ -70,13 +90,13 @@ export const progressionTest = (
   }
 
   const completed =
-    currentProgressionTest.length === lesson.romanIntervals.length;
+    currentProgressionTest.length === chordProgression.romanIntervals.length;
 
   callback(matchedChord, completed);
 
   if (completed) {
     const attempt = currentProgressionTest.map(({ tonic }) => tonic);
-    const answer = fromRomanNumerals(tonic, lesson.romanIntervals);
+    const answer = fromRomanNumerals(tonic, chordProgression.romanIntervals);
     const correct = R.equals(attempt, answer);
 
     console.log('answer', answer);
