@@ -3,8 +3,10 @@ import {
   SELECT_TONIC,
   SELECT_CHORD_PROGRESSION,
   START_GAME,
+  REGISTER_NOTES_PRESSED,
 } from '../action-types';
 import { getChordsInKey, getScaleForKey } from '../../lessons/utils';
+// import { addNote, removeNote } from '../../utils/notes';
 
 const tonics = chromatic(['C2', 'B2'], { sharps: false }).map(tonic =>
   tonic.replace(/(\d)/, ''),
@@ -82,6 +84,11 @@ function lesson(state = initialState, action) {
       return {
         ...state,
         lessonInProgress: true, // use logic to determine this
+      };
+    case REGISTER_NOTES_PRESSED:
+      return {
+        ...state,
+        notesPressed: action.notesPressed,
       };
     default:
       return state;

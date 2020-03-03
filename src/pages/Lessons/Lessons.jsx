@@ -18,7 +18,6 @@ class Lessons extends Component {
     super(props);
 
     this.state = {
-      notesPressed: [],
       displayText: '',
       showGuideNotes: true,
     };
@@ -36,15 +35,15 @@ class Lessons extends Component {
 
   handleOnNoteOn = note => {
     // console.log('Note on', note);
-    this.setState({
-      notesPressed: addNote(this.state.notesPressed)(note),
+    this.props.registerNotesPressed({
+      notesPressed: addNote(this.props.notesPressed)(note),
     });
   };
 
   handleOnNoteOff = note => {
     // console.log('Note off', note);
-    this.setState({
-      notesPressed: removeNote(this.state.notesPressed)(note.id),
+    this.props.registerNotesPressed({
+      notesPressed: removeNote(this.props.notesPressed)(note.id),
     });
   };
 
@@ -102,12 +101,12 @@ class Lessons extends Component {
 
   // move this logic to reducer based on notes pressed
   renderChordTestInformation() {
-    const { notesPressed } = this.state;
     const {
       tonic,
       chords,
       chordProgressions,
       defaultNumberOfNotesInChord,
+      notesPressed,
     } = this.props;
 
     // NOTE: USE STATE TO HANDLE INSTRUCTION / PROGRESS
@@ -143,8 +142,9 @@ class Lessons extends Component {
       chords,
       chordProgressions,
       defaultOctave,
+      notesPressed,
     } = this.props;
-    const { notesPressed, showGuideNotes } = this.state;
+    const { showGuideNotes } = this.state;
     const displayRows = [this.renderChordTestInformation()];
 
     // move this logic to reducer
@@ -196,13 +196,14 @@ Lessons.propTypes = {
   chordProgressions: PropTypes.array.isRequired,
   chords: PropTypes.object.isRequired,
   defaultNumberOfNotesInChord: PropTypes.number.isRequired,
-  // registerNotesPressed: PropTypes.func.isRequired,
+  registerNotesPressed: PropTypes.func.isRequired,
   scales: PropTypes.object.isRequired,
   selectChordProgression: PropTypes.func.isRequired,
   selectedLessonType: PropTypes.string,
   startGame: PropTypes.func.isRequired,
   tonic: PropTypes.string.isRequired,
   tonics: PropTypes.array.isRequired,
+  notesPressed: PropTypes.array.isRequired,
 };
 
 Lessons.defaultProps = {
