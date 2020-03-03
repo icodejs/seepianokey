@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
 import LessonSelector from '../../components/LessonSelector';
-import { addNote, removeNote } from '../../utils/notes';
 import { progressionTest, getChordGuideNotes } from '../../lessons/utils';
 
 import './Lessons.scss';
@@ -35,15 +34,15 @@ class Lessons extends Component {
 
   handleOnNoteOn = note => {
     // console.log('Note on', note);
-    this.props.registerNotesPressed({
-      notesPressed: addNote(this.props.notesPressed)(note),
+    this.props.registerNotePressed({
+      note,
     });
   };
 
   handleOnNoteOff = note => {
     // console.log('Note off', note);
-    this.props.registerNotesPressed({
-      notesPressed: removeNote(this.props.notesPressed)(note.id),
+    this.props.registerNoteReleased({
+      note,
     });
   };
 
@@ -196,7 +195,8 @@ Lessons.propTypes = {
   chordProgressions: PropTypes.array.isRequired,
   chords: PropTypes.object.isRequired,
   defaultNumberOfNotesInChord: PropTypes.number.isRequired,
-  registerNotesPressed: PropTypes.func.isRequired,
+  registerNotePressed: PropTypes.func.isRequired,
+  registerNoteReleased: PropTypes.func.isRequired,
   scales: PropTypes.object.isRequired,
   selectChordProgression: PropTypes.func.isRequired,
   selectedLessonType: PropTypes.string,

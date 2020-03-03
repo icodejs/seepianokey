@@ -12,7 +12,8 @@ describe('Lessons', () => {
     const props = {
       startGame: () => {},
       selectChordProgression: () => {},
-      registerNotesPressed: () => {},
+      registerNotePressed: () => {},
+      registerNoteReleased: () => {},
       defaultNumberOfNotesInChord: 1000,
       notesPressed: [],
       chords: {

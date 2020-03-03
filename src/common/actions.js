@@ -5,7 +5,8 @@ import {
   SELECT_TONIC,
   START_GAME,
   SELECT_CHORD_PROGRESSION,
-  REGISTER_NOTES_PRESSED,
+  REGISTER_NOTE_PRESSED,
+  REGISTER_NOTE_RELEASED,
 } from './action-types';
 
 export const selectMidiController = ({ selectedDevice }) => ({
@@ -49,7 +50,12 @@ export const startGame = ({
   numberOfNotesInChord,
 });
 
-export const registerNotesPressed = ({ notesPressed }) => ({
-  type: REGISTER_NOTES_PRESSED,
-  notesPressed,
+export const registerNotePressed = ({ note }) => ({
+  type: REGISTER_NOTE_PRESSED,
+  note,
+});
+
+export const registerNoteReleased = ({ note }) => ({
+  type: REGISTER_NOTE_RELEASED,
+  note,
 });
