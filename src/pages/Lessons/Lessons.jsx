@@ -10,6 +10,10 @@ import { getChordGuideNotes } from '../../lessons/utils';
 import './Lessons.scss';
 
 const getSelectedItem = items => items.find(({ selected }) => selected);
+const gameInfo = game =>
+  `${game.tonic} ${game.lessonType} ${
+    game.progression.name
+  } ${game.status.toUpperCase()}`;
 
 class Lessons extends Component {
   constructor(props) {
@@ -99,22 +103,37 @@ class Lessons extends Component {
     );
   };
 
-  // move this logic to reducer based on notes pressed
   renderChordTestInformation() {
     const { games } = this.props;
     const [game = {}] = [...games].reverse();
 
+    if (!games.length) {
+      return;
+    }
+
     return (
       <Fragment>
-        <p>{game.status}</p>
+        <p>Current game: {gameInfo(game)}</p>
       </Fragment>
     );
   }
 
-  render() {
-    const { tonic, tonics, defaultOctave, notesPressed, games } = this.props;
+  renderGameInformation() {
+    const { games } = this.props;
+    return (
+      <ul className="game-information">
+        {games.map((game, index) => {
+          return (
+            <li key={game.id}>Game {`${index + 1}. ${gameInfo(game)}`}</li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  renderPiano() {
     const { showGuideNotes } = this.state;
-    const displayRows = [this.renderChordTestInformation()];
+    const { notesPressed, defaultOctave, games } = this.props;
     const [game = {}] = [...games].reverse();
 
     // move this logic to reducer
@@ -124,6 +143,28 @@ class Lessons extends Component {
       interval: R.pathOr([], ['answers'], game).length,
       octave: defaultOctave,
     });
+
+    return (
+      <Piano
+        onNoteOn={this.handleOnNoteOn}
+        onNoteOff={this.handleOnNoteOff}
+        notesPressed={notesPressed}
+        guideNotes={
+          showGuideNotes
+            ? {
+                scale: R.pathOr([], ['scale', 'notes'], game),
+                chord: chordNotes,
+              }
+            : null
+        }
+        onNoteClick={this.handleNoteClick}
+      />
+    );
+  }
+
+  render() {
+    const { tonic, tonics } = this.props;
+    const displayRows = [this.renderChordTestInformation()];
 
     return (
       <div className="Lessons">
@@ -143,22 +184,11 @@ class Lessons extends Component {
           </button>
         </div>
 
+        {this.renderGameInformation()}
+
         <Display rows={displayRows} />
 
-        <Piano
-          onNoteOn={this.handleOnNoteOn}
-          onNoteOff={this.handleOnNoteOff}
-          notesPressed={notesPressed}
-          guideNotes={
-            showGuideNotes
-              ? {
-                  scale: R.pathOr([], ['scale', 'notes'], game),
-                  chord: chordNotes,
-                }
-              : null
-          }
-          onNoteClick={this.handleNoteClick}
-        />
+        {this.renderPiano()}
       </div>
     );
   }
