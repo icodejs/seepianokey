@@ -87,8 +87,9 @@ function game(state = initialState, action) {
     case REGISTER_NOTE_PRESSED: {
       const notesPressed = addNote(state.notesPressed)(action.note);
       const [game = {}] = [...state.games].reverse();
+
       // time for a new game to be created
-      if (game.status === 'success' || game.status === 'failure') {
+      if (!game.id || game.status === 'success' || game.status === 'failure') {
         return state;
       }
 
