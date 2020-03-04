@@ -1,21 +1,24 @@
+/// ------ WHERE ARE THE TESTS? ------
+
 import * as R from 'ramda';
 import { chord } from '@tonaljs/chord';
 import { majorKey, minorKey } from '@tonaljs/key';
 import { scale } from '@tonaljs/scale';
+import { notesAreEqual } from '../config';
 
 const TRIAD_CHORD_LENGTH = 3;
 
 export const getChordGuideNotes = ({
   chordProgression,
-  chordsInKey,
+  chords,
   interval,
   octave,
 }) => {
-  if (interval > 2) {
+  if (interval >= TRIAD_CHORD_LENGTH) {
     return [];
   }
 
-  const chordFound = chordsInKey.find(
+  const chordFound = chords.find(
     chord => chord.scaleDegree === chordProgression.numericIntervals[interval],
   );
   return chordFound ? chordFound.notes.map(key => key + octave) : [];
@@ -25,7 +28,7 @@ export const getChordsInKey = ({ tonic, scaleType, octave }) => {
   const tonicKey = octave ? `${tonic}${octave}` : tonic;
   const key = scaleType === 'major' ? majorKey(tonicKey) : minorKey(tonicKey);
 
-  // We are only interested in triads so remove references to seventh chords for now
+  // We are only interested in triads for now, so remove references to seventh chords
   return key.chords
     .map(chord => {
       const diminished7thChord = chord.includes('m7b5');
@@ -51,18 +54,20 @@ export const getScaleForKey = ({ tonic, scaleType, octave = 4 }) => {
 };
 
 export const findChordMatch = ({
-  chordsInKey,
+  chords,
   notesPressed,
-  numberOfNotesInChord = TRIAD_CHORD_LENGTH, // Only interested in triad chords for now
+  numberOfNotesInChord,
 }) => {
   if (notesPressed.length !== numberOfNotesInChord) {
     return;
   }
-  const noteNames = notesPressed.map(R.prop('name'));
+  const noteNamesPressed = notesPressed.map(R.prop('name'));
 
-  return chordsInKey.find(({ notes }) => {
-    return notes.every(note => {
-      return noteNames.includes(note);
+  return chords.find(({ notes: chordNotes }) => {
+    return chordNotes.every(chordNote => {
+      return noteNamesPressed.some(noteNamePressed => {
+        return notesAreEqual(chordNote, noteNamePressed);
+      });
     });
   });
 };

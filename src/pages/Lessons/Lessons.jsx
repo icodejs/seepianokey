@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import * as R from 'ramda';
 
 import Piano from '../../components/Piano';
 import Display from '../../components/Display';
@@ -7,8 +8,6 @@ import LessonSelector from '../../components/LessonSelector';
 import { getChordGuideNotes } from '../../lessons/utils';
 
 import './Lessons.scss';
-
-let currentProgressionTest = [];
 
 const getSelectedItem = items => items.find(({ selected }) => selected);
 
@@ -59,6 +58,7 @@ class Lessons extends Component {
       chordProgressions,
       startGame,
       chords,
+      scales,
       defaultNumberOfNotesInChord,
     } = this.props;
 
@@ -67,6 +67,7 @@ class Lessons extends Component {
       selectedLessonType,
       selectedChordProgression: getSelectedItem(chordProgressions),
       chords: chords[tonic],
+      scale: scales[tonic],
       numberOfNotesInChord: defaultNumberOfNotesInChord,
     });
   };
@@ -111,26 +112,16 @@ class Lessons extends Component {
   }
 
   render() {
-    const {
-      tonic,
-      tonics,
-      scales,
-      chords,
-      chordProgressions,
-      defaultOctave,
-      notesPressed,
-    } = this.props;
+    const { tonic, tonics, defaultOctave, notesPressed, games } = this.props;
     const { showGuideNotes } = this.state;
     const displayRows = [this.renderChordTestInformation()];
-
-    // move this logic to reducer
-    const scaleNotes = scales[tonic].notes;
+    const [game = {}] = [...games].reverse();
 
     // move this logic to reducer
     const chordNotes = getChordGuideNotes({
-      chordProgression: chordProgressions[0],
-      chordsInKey: chords[tonic],
-      interval: currentProgressionTest.length,
+      chordProgression: R.pathOr([], ['progression'], game),
+      chords: R.pathOr([], ['chords'], game),
+      interval: R.pathOr([], ['answers'], game).length,
       octave: defaultOctave,
     });
 
@@ -159,7 +150,12 @@ class Lessons extends Component {
           onNoteOff={this.handleOnNoteOff}
           notesPressed={notesPressed}
           guideNotes={
-            showGuideNotes ? { scale: scaleNotes, chord: chordNotes } : null
+            showGuideNotes
+              ? {
+                  scale: R.pathOr([], ['scale', 'notes'], game),
+                  chord: chordNotes,
+                }
+              : null
           }
           onNoteClick={this.handleNoteClick}
         />

@@ -67,5 +67,9 @@ describe('notesAreEqual', () => {
     expect(notesAreEqual('G', 'G')).toBeTruthy();
     expect(notesAreEqual('A', 'A')).toBeTruthy();
     expect(notesAreEqual('B', 'B')).toBeTruthy();
+    expect(notesAreEqual('B4', 'B3')).toBeTruthy();
+    expect(notesAreEqual('B4', 'B4')).toBeTruthy();
+    expect(notesAreEqual('B4', 'B4', true)).toBeTruthy();
+    expect(notesAreEqual('B4', 'B3', true)).toEqual(false);
   });
 });

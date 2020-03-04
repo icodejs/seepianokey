@@ -98,35 +98,13 @@ export const flatToSharp = note => {
   return notes[note] || note;
 };
 
-export const notesAreEqual = (a, b) =>
-  flatToSharp(a) === flatToSharp(b) || sharpToFlat(a) === sharpToFlat(b);
+export const notesAreEqual = (note1, note2, checkOctave = false) => {
+  const [note1Name, note1Octave] = note1.split(/(\d)/).filter(a => a);
+  const [note2Name, note2Octave] = note2.split(/(\d)/).filter(a => a);
 
-// const modules = [
-//   {
-//     id: 'scales',
-//     title: 'Learn Scales',
-//     description: 'Pick a scale and practice.',
-//     level: '01',
-//     tasks: [
-//       {
-//         id: 'majorScales',
-//         title: 'Major Scales',
-//         lessons: notes.map((note, index) => ({
-//           title: `${flatToSharp(note)} Major Scale`,
-//           id: flatToSharp(note),
-//           lessonNumber: index + 1,
-//           sequence: Scale.notes(`${note} major`),
-//         }))
-//       },
-//       {
-//         id: 'minorScales',
-//         title: 'Minor Scales',
-//         // ...
-//       }
-//     ]
-//   }
-// ];
-// e.g. Scale training || Chord training || Timing || Find Key || Chord progression training
-
-// console.log(Scale.names());
-// console.log(modules);
+  return (
+    (flatToSharp(note1Name) === flatToSharp(note2Name) ||
+      sharpToFlat(note1Name) === sharpToFlat(note2Name)) &&
+    (checkOctave ? note1Octave === note2Octave : true)
+  );
+};

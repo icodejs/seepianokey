@@ -16,7 +16,11 @@
 1. Assist user by showing each chord on keyboard or keys in scale (Use toggle for each helper option)
 2. Selecting a tonic and progression should trigger an event that builds a lesson and stores it in state. This state should then be passed down and used by app, e.g. piano guide notes and progression test.
 3. Put notes names on keys i.e. b#4
-4. Buttons to choose chord progression
+4. Lesson types
+   - 5 Chord
+   - Octaves in each key
+   - Scales
+     7th Chords
 5. Help instructions
 6. ~~Make sure correct octave is pressed and extract octave from notes pressed and noted needed for comparison.~~
 
@@ -25,44 +29,17 @@
 1. Create events / actions to get the game going
 2. How can the UI option be build programmatically
 
-- Add list of progressions to choose from
+~~ - Add list of progressions to choose from~~
 
-3. Work out how to initialise a game base on user input
+3. ~~Work out how to initialise a game base on user input~~
 
-- When start game is pressed fire event and init a game
+~~- When start game is pressed fire event and init a game~~
 
 4. Adjust starting octave when using smaller keyboards
 
 ```js
 // Every time a new game is started this object will be created.
 // Need these values stored somewhere as option for use to select via the UI.
-
-const game = {
-  id: null,
-  type: null, // chords|scales
-  tonic: null, // C,C#, D
-  progression: {
-    name: '2-5-1',
-    romanNumeralIntervals: ['II', 'V', 'I'],
-    numericIntervals: ['2', '5', '1'],
-  },
-  answers: [
-    ['C', 'E', 'G'],
-    ['E', 'G', 'B'],
-    ['D', 'F', 'A'],
-  ], // array of arrays with all chords
-  current: [], // chords that need to be played next
-  status: 'idle', // in-progress, idle, success, failure
-  // text will use template string to add custom info
-  question: `Play the {progression-here} chord progression.`,
-  idleText: 'Press start to begin.',
-  inProgressText: 'Please enter next chord',
-  successText: 'Brilliant. You have enter chord progression correctly',
-  errorText: 'Incorrect. One or more chords was incorrect. Please try again.',
-  helpText: 'If you need help, you can switch on not guide.',
-  loadingText: 'Loading...',
-};
-```
 
 ## Useful videos
 
@@ -82,11 +59,13 @@ const game = {
 This game will cycle through C chords and ask you to play them
 
 ```
+
 Chord.names().map(c => console.log(
-  `C: ${c}`,
-  Chord.notes('C', c)
+`C: ${c}`,
+Chord.notes('C', c)
 ));
 console.log('------------');
+
 ```
 
 https://github.com/danigb/tonal/tree/master/extensions/key
@@ -94,12 +73,14 @@ Game to play all chords in the key of C
 Also limit to progression using: `Key.chords("A major", [5, 4, 1]) // => ["E7", "DMaj7", AMaj7"]`
 
 ```
+
 Key.chords('Db major').map(c => console.log(
-  `Chords in C: ${c}`,
-  Chord.notes(c)
+`Chords in C: ${c}`,
+Chord.notes(c)
 ));
 console.log('============');
-```
+
+````
 
 http://danigb.github.io/tonal/module-Detect.html#~chord
 
@@ -148,4 +129,4 @@ const debug = notesPressed => {
   // });
   // console.log('chordNotes:', chordNotes);
 };
-```
+````

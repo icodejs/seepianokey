@@ -192,6 +192,15 @@ class Piano extends Component {
       );
     });
 
+    const chordGuideNote = guideNotes.chord.find((n, i) => {
+      const [noteName, noteOctave] = n.split(/(\d)/).filter(a => a);
+
+      return (
+        notesAreEqual(noteName, note) &&
+        parseInt(pianoOctave, 10) === parseInt(noteOctave, 10)
+      );
+    });
+
     return (
       <li
         key={id}
@@ -199,6 +208,7 @@ class Piano extends Component {
         className={classNames(id, {
           selected,
           'scale-guide-note': scaleGuideNote,
+          'chord-guide-note': chordGuideNote,
         })}
       />
     );

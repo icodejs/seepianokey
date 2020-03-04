@@ -39,6 +39,7 @@ export const startGame = ({
   selectedLessonType,
   selectedChordProgression,
   chords,
+  scale,
   numberOfNotesInChord,
 }) => ({
   type: START_GAME,
@@ -47,6 +48,7 @@ export const startGame = ({
   selectedLessonType,
   selectedChordProgression,
   chords,
+  scale,
   numberOfNotesInChord,
 });
 

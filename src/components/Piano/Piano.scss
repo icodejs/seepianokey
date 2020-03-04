@@ -63,6 +63,9 @@ $bg: #282c34;
     &.scale-guide-note {
       background: yellow;
     }
+    &.chord-guide-note {
+      background: rgb(158, 158, 4);
+    }
     &.selected {
       background: #61dafb;
     }

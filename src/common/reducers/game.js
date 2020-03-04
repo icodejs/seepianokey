@@ -42,7 +42,7 @@ const getStatus = ({ completed, answersAreCorrect }) => {
 };
 
 const gameCompleted = ({ state, game }) => {
-  return state.answers.length === game.progression.chordsInProgression;
+  return state.answers.length === game.progression.numberOfNotesInChord;
 };
 
 const checkAnswer = ({ answers, correctAnswers, completed }) => {
@@ -64,7 +64,7 @@ function game(state = initialState, action) {
   switch (action.type) {
     case START_GAME:
       const progression = R.omit(['selected'], action.selectedChordProgression);
-      const { id, tonic, selectedLessonType, chords } = action;
+      const { id, tonic, selectedLessonType, chords, scale } = action;
 
       return {
         ...state,
@@ -75,7 +75,8 @@ function game(state = initialState, action) {
             id: id,
             tonic: tonic,
             lessonType: selectedLessonType,
-            chords: chords,
+            chords,
+            scale,
             progression,
             correctAnswers: fromRomanNumerals(
               action.tonic,
@@ -95,8 +96,8 @@ function game(state = initialState, action) {
 
       const matchedChord = findChordMatch({
         notesPressed: notesPressed,
-        chordsInKey: game.chords,
-        numberOfNotesInChord: game.numberOfNotesInChord,
+        chords: game.chords,
+        numberOfNotesInChord: game.progression.numberOfNotesInChord,
       });
 
       if (!matchedChord) {
